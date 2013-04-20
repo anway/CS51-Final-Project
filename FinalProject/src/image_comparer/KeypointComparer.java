@@ -8,9 +8,10 @@ public class KeypointComparer implements PixelArrayComparer
 		
 	}
 	
-	public bool contains(int[] myarray, int value){
-		for(int val:myarray){
-			if(val==value)
+	public bool contains(int[] array1, int[] array2, int value1, int value2){
+		int length = array1.length; //they're the same length
+		for(int i=0; i<length; i++){
+			if (value1 == array1[i]) && (value2 == array2[i])
 				return true;
 		}
 		return false;
@@ -39,7 +40,7 @@ public class KeypointComparer implements PixelArrayComparer
 			do {
 				currWidth = rand.nextInt(width);
 				currHeight = rand.nextInt(height);
-			while (contains(pickedWidth, currWidth) && contains(pickedHeight, currHeight))
+			while (contains(pickedWidth, currWidth, pickedHeight, currHeight))
 			if (a1.getPixel[currWidth][currHeight]==a2.getPixel[currWidth][currHeight])
 				numMatched++;
 			pickedWidth[n]=currWidth;
