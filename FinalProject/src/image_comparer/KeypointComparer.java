@@ -8,7 +8,7 @@ public class KeypointComparer implements PixelArrayComparer
 		
 	}
 	
-	public bool contains(int[] array1, int[] array2, int value1, int value2){
+	public boolean contains(int[] array1, int[] array2, int value1, int value2){
 		int length = array1.length; //they're the same length
 		for(int i=0; i<length; i++){
 			if (value1 == array1[i]) && (value2 == array2[i])
