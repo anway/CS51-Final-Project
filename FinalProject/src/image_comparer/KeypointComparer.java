@@ -41,7 +41,7 @@ public class KeypointComparer implements PixelArrayComparer
 				currWidth = rand.nextInt(width);
 				currHeight = rand.nextInt(height);
 			}
-			while (contains(pickedWidth, currWidth, pickedHeight, currHeight))
+			while (contains(pickedWidth, currWidth, pickedHeight, currHeight));
 			if (a1.getPixel[currWidth][currHeight]==a2.getPixel[currWidth][currHeight])
 				numMatched++;
 			pickedWidth[n]=currWidth;
