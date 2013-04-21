@@ -36,16 +36,25 @@ public class MyImage
 		return ((double) getWidth())/((double) getHeight());
 	}
 	
-	//TODO
-	public void setSize(double scale)
-	{
-		return;
+	/* Scales image */
+	public void setSize(int newx, int newy)
+	{	
+		image = ((BufferedImage) image).getScaledInstance 
+			(newx, newy, SCALE_DEFAULT);		
 	}
 	
-	//TODO
+	/* Returns image as PixelArray */
 	public PixelArray toPixelArray()
-	{
-		return new PixelArray(null);
+	{	
+		int w = image.getWidth();
+		int h = image.getHeight();
+		int [][] result = new int[h][w];
+		
+		for (int row = 0; row < h; row++) {
+		  for (int col = 0; col < w; col++) 
+			result [row][col] = image.getRGB(col, row);
+		}
+		return new PixelArray(result);
 	}
 	
 	class MyImageException extends IOException

@@ -9,11 +9,18 @@ public class KeypointComparer implements PixelArrayComparer
 		
 	}
 	
+<<<<<<< HEAD
 	public boolean contains(int[] array1, int[] array2, int value1, int value2) {
 		int length = array1.length; //they're the same length
 		for(int i=0; i<length; i++) {
 			if (value1 == array1[i]) && (value2 == array2[i])
 
+=======
+	public boolean contains(int[] array1, int[] array2, int value1, int value2){
+		int length = array1.length; //they're the same length
+		for(int i=0; i<length; i++){
+			if (value1 == array1[i] && value2 == array2[i])
+>>>>>>> 886590553121ee38b709217672347145e92a60af
 				return true;
 		}
 		return false;
@@ -41,8 +48,13 @@ public class KeypointComparer implements PixelArrayComparer
 			do {
 				currWidth = rand.nextInt(width);
 				currHeight = rand.nextInt(height);
+<<<<<<< HEAD
 			}
 			while (contains(pickedWidth, pickedHeight, currWidth, currHeight));
+=======
+			}
+			while (contains(pickedWidth, pickedHeight, currWidth, currHeight));
+>>>>>>> 886590553121ee38b709217672347145e92a60af
 			if (a1.getPixel(currWidth, currHeight)==a2.getPixel(currWidth, currHeight))
 				numMatched++;
 			pickedWidth[n]=currWidth;
