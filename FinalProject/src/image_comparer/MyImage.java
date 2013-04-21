@@ -39,20 +39,19 @@ public class MyImage
 	/* Scales image */
 	public void setSize(int newx, int newy)
 	{	
-		image = ((BufferedImage) image).getScaledInstance 
-			(newx, newy, SCALE_DEFAULT);		
+		im = (BufferedImage) im.getScaledInstance(newx, newy, BufferedImage.SCALE_DEFAULT);		
 	}
 	
 	/* Returns image as PixelArray */
 	public PixelArray toPixelArray()
 	{	
-		int w = image.getWidth();
-		int h = image.getHeight();
+		int w = im.getWidth();
+		int h = im.getHeight();
 		int [][] result = new int[h][w];
 		
 		for (int row = 0; row < h; row++) {
 		  for (int col = 0; col < w; col++) 
-			result [row][col] = image.getRGB(col, row);
+			result [row][col] = im.getRGB(col, row);
 		}
 		return new PixelArray(result);
 	}

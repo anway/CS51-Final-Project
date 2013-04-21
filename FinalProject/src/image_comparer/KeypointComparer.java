@@ -24,8 +24,10 @@ public class KeypointComparer implements PixelArrayComparer
 	 * Pick random x and random y and make sure it's not a repeat
 	 * of already picked point. Then compare and get a percentage
 	 */
-	public double compare(PixelArray a1, PixelArray a2, int n)
+	public double compare(PixelArray a1, PixelArray a2)
 	{
+		//TODO How is the number of pixels determined?
+		int n = 0;
 		// we're assuming that height and width of a1 and a2 are
 		// same right??
 		int width = a1.getWidth();
