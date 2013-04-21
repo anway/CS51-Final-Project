@@ -11,20 +11,19 @@ public class PixelArray
 	
 	public int getWidth()
 	{
-		return pixels.length;
+        return pixels[0].length;
 	}
 	
 	public int getHeight()
 	{
-		return pixels[0].length;
+		return pixels.length;
 	}
 	
 	public int getPixel(int x, int y)
 	{
-		return pixels[x][y];
+		return pixels[y][x];
 	}
 	
-	//TODO
 	public PixelArray round()
 	{
 		return new PixelArray(pixels);
