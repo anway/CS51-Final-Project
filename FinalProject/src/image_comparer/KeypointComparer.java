@@ -1,5 +1,6 @@
 package image_comparer;
 import java.util.Random;
+import java.util.*;
 
 public class KeypointComparer implements PixelArrayComparer
 {
@@ -12,6 +13,7 @@ public class KeypointComparer implements PixelArrayComparer
 		int length = array1.length; //they're the same length
 		for(int i=0; i<length; i++) {
 			if (value1 == array1[i]) && (value2 == array2[i])
+
 				return true;
 		}
 		return false;
@@ -31,16 +33,16 @@ public class KeypointComparer implements PixelArrayComparer
 		int height = a1.getHeight();
 		// since there aren't any tuples we'll just use two arrays
 		// to record points already picked
-		int[n] pickedWidth;
-		int[n] pickedHeight;
-		int numMatched, currWidth, currHeight;
+		int pickedWidth[] =  new int[n];
+		int pickedHeight[] = new int[n];
+		int numMatched=0, currWidth, currHeight;
 		Random rand = new Random();
 		for (int i=0; i<n; i++) {
 			do {
 				currWidth = rand.nextInt(width);
 				currHeight = rand.nextInt(height);
 			}
-			while (contains(pickedWidth, currWidth, pickedHeight, currHeight));
+			while (contains(pickedWidth, pickedHeight, currWidth, currHeight));
 			if (a1.getPixel(currWidth, currHeight)==a2.getPixel(currWidth, currHeight))
 				numMatched++;
 			pickedWidth[n]=currWidth;
@@ -53,13 +55,16 @@ public class KeypointComparer implements PixelArrayComparer
         int width = a1.getWidth();
 		int height = a1.getHeight();
         int dimension = width*height;
-        int[(height-1)*(width-1)] diffs;
-        int counter = 0;
+        ArrayList<float> diffs = new ArrayList<float>;
+        ArrayList<int> xcos = new ArrayList<int>;
+        ArrayList<int> ycos = new ArrayList<int>;
         float rsum;
         float bsum;
         float gsum;
+        float diff;
+        int counter = 0;
         for (int i=1;++i<height;) {
-            for (int j=1;++j<height;) {
+            for (int j=1;++j<width;) {
                 rsum = 0;
                 bsum = 0;
                 gsum = 0;
@@ -70,23 +75,18 @@ public class KeypointComparer implements PixelArrayComparer
                         gsum +=
                     }
                 }
-                
-                diffs[counter] = 
+                diff = abs(rsum-)+abs(bsum-)+abs(gsum-);
+                if (diff > 0.2) {
+                    xcos.add(i);
+                    ycos.add(j);
+                    ++counter;
+                }
             }
         }
-        
-        int[n] pickedWidth;
-		int[n] pickedHeight;
+        int n = xcos.size();
         for (int i=0; i<n; i++) {
-			do {
-				currWidth = rand.nextInt(width);
-				currHeight = rand.nextInt(height);
-			}
-			while (contains(pickedWidth, currWidth, pickedHeight, currHeight));
-			if (a1.getPixel(currWidth, currHeight)==a2.getPixel(currWidth, currHeight))
+			if (a1.getPixel(xcos.get(i), ycos.get(j))==a2.getPixel(xcos.get(i), ycos.get(j)))
 				numMatched++;
-			pickedWidth[n]=currWidth;
-			pickedHeight[n]=currHeight;
 		}
     }
 }
