@@ -23,12 +23,8 @@ public class PixelArray
 	{
 		return pixels[y][x];
 	}
-	
-<<<<<<< HEAD
-	public PixelArray round()
-=======
+    
 	public int getRed(int pixel)
->>>>>>> 886590553121ee38b709217672347145e92a60af
 	{
 		return (pixel >> 16) & 0x000000FF;
 	}

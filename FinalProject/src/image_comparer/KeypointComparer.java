@@ -9,13 +9,6 @@ public class KeypointComparer implements PixelArrayComparer
 		
 	}
 	
-<<<<<<< HEAD
-	public boolean contains(int[] array1, int[] array2, int value1, int value2) {
-		int length = array1.length; //they're the same length
-		for(int i=0; i<length; i++) {
-			if (value1 == array1[i]) && (value2 == array2[i])
-
-=======
 	public boolean contains(int[] array1, int[] array2, int value1, int value2){
 		int length = array1.length; //they're the same length
 		for(int i=0; i<length; i++){
@@ -48,13 +41,8 @@ public class KeypointComparer implements PixelArrayComparer
 			do {
 				currWidth = rand.nextInt(width);
 				currHeight = rand.nextInt(height);
-<<<<<<< HEAD
 			}
 			while (contains(pickedWidth, pickedHeight, currWidth, currHeight));
-=======
-			}
-			while (contains(pickedWidth, pickedHeight, currWidth, currHeight));
->>>>>>> 886590553121ee38b709217672347145e92a60af
 			if (a1.getPixel(currWidth, currHeight)==a2.getPixel(currWidth, currHeight))
 				numMatched++;
 			pickedWidth[n]=currWidth;
@@ -82,12 +70,14 @@ public class KeypointComparer implements PixelArrayComparer
                 gsum = 0;
                 for (int k=-1;k<2;++k) {
                     for (int l=-1;l<2;++l) {
-                        rsum += 
-                        bsum +=
-                        gsum +=
+                        rsum += (float) a1.getRed(a1.getPixel(i+k, j+l);
+                        bsum += (float) a1.getBlue(a1.getPixel(i+k, j+l);
+                        gsum += (float) a1.getGreen(a1.getPixel(i+k, j+l);
                     }
                 }
-                diff = abs(rsum-)+abs(bsum-)+abs(gsum-);
+                diff = abs(rsum-a1.getRed(a1.getPixel(i, j))
+                     +abs(bsum-a1.getBlue(a1.getPixel(i, j))
+                     +abs(gsum-a1.getGreen(a1.getPixel(i, j));
                 if (diff > 0.2) {
                     xcos.add(i);
                     ycos.add(j);
