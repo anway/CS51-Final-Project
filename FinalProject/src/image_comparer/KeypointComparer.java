@@ -32,8 +32,8 @@ public class KeypointComparer implements PixelArrayComparer
 		int height = a1.getHeight();
 		// since there aren't any tuples we'll just use two arrays
 		// to record points already picked
-		int[] pickedWidth;
-		int[] pickedHeight;
+		int pickedWidth[] =  new int[n];
+		int pickedHeight[] = new int[n];
 		int numMatched=0, currWidth, currHeight;
 		Random rand = new Random();
 		for (int i=0; i<n; i++){
