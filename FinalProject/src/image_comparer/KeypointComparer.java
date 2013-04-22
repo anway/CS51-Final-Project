@@ -50,10 +50,10 @@ public class KeypointComparer implements PixelArrayComparer
 		int height = a1.getHeight();
 		ArrayList<Integer> xcos = new ArrayList<Integer>();
 		ArrayList<Integer> ycos = new ArrayList<Integer>();
-		float rsum;
-		float bsum;
-		float gsum;
-		float diff;
+		double rsum;
+		double bsum;
+		double gsum;
+		double diff;
 		int counter = 0;
 
         // finds interesting pixels
@@ -64,15 +64,16 @@ public class KeypointComparer implements PixelArrayComparer
 				gsum = 0;
 				for (int k=-1;k<2;++k) {
 					for (int l=-1;l<2;++l) {
-						rsum += (float) a1.getRed(a1.getPixel(i+k, j+l));
-						bsum += (float) a1.getBlue(a1.getPixel(i+k, j+l));
-						gsum += (float) a1.getGreen(a1.getPixel(i+k, j+l));
+						rsum += (double) a1.getRed(a1.getPixel(i+k, j+l));
+						bsum += (double) a1.getBlue(a1.getPixel(i+k, j+l));
+						gsum += (double) a1.getGreen(a1.getPixel(i+k, j+l));
 					}
 				}
-				diff = Math.abs(rsum-a1.getRed(a1.getPixel(i, j)))
+                rsum /= 9.0; bsum /= 9.0; gsum /= 9.0;
+				diff = (Math.abs(rsum-a1.getRed(a1.getPixel(i, j)))
 						+ Math.abs(bsum-a1.getBlue(a1.getPixel(i, j)))
-						+ Math.abs(gsum-a1.getGreen(a1.getPixel(i, j)));
-				if (diff > 0.2) {
+						+ Math.abs(gsum-a1.getGreen(a1.getPixel(i, j))))/768.0;
+				if (diff > 0.1) {
 					xcos.add(i);
 					ycos.add(j);
 					++counter;
