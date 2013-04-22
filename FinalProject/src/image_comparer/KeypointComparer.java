@@ -91,6 +91,6 @@ public class KeypointComparer implements PixelArrayComparer
 				matched++;
 		}
 
-		return ((double) matched) / ((double) n);
+		return ((double) matched) / ((double) counter);
 	}
 }
