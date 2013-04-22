@@ -9,9 +9,21 @@ public class Driver
 		MyImage im1 = new MyImage(args[0]);
 		MyImage im2 = new MyImage(args[1]);
 
-		int width = Math.min(im1.getWidth(), im2.getWidth());
-		im1.setSize((int) ((double) width/(double) im1.getWidth()));
-		im2.setSize((int) ((double) width/(double) im2.getWidth()));
+		int w1 = im1.getWidth(), w2 = im2.getWidth();
+		int h1 = im1.getHeight(), h2 = im2.getHeight();
+		int width, height;
+		if ((w1 + h1) / 2 < (w2 + h2) / 2)
+		{
+			width = w1;
+			height = h1;
+		}
+		else
+		{
+			width = w2;
+			height = h2;
+		}
+		im1.setSize(width, height);
+		im2.setSize(width, height);
 		PixelArray a1 = im1.toPixelArray();
 		PixelArray a2 = im2.toPixelArray();
 
