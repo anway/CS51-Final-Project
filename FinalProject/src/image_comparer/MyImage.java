@@ -1,6 +1,7 @@
 package image_comparer;
 
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -40,11 +41,13 @@ public class MyImage
 	
 	/* Scales image */
 	public void setSize(int newx, int newy)
-	{	
+	{
+		Image scaledImage = im.getScaledInstance(newx, newy,
+				Image.SCALE_DEFAULT);
 		BufferedImage imScaled = new BufferedImage(newx, newy,
 				BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2 = imScaled.createGraphics();
-		g2.drawImage(imScaled, null, null);
+		g2.drawImage(scaledImage, null, null);
 		im = imScaled;
 	}
 	
@@ -57,9 +60,16 @@ public class MyImage
 		
 		for (int row = 0; row < h; row++) {
 		  for (int col = 0; col < w; col++) 
-			result [row][col] = im.getRGB(col, row);
+			result[row][col] = im.getRGB(col, row);
 		}
 		return new PixelArray(result);
+	}
+	
+	public static int compare(MyImage im1, MyImage im2)
+	{
+		int size1 = (im1.getWidth() + im1.getHeight()) / 2;
+		int size2 = (im2.getWidth() + im2.getHeight()) / 2;
+		return size1 < size2 ? -1 : size1 == size2 ? 0 : 1;
 	}
 	
 	/*

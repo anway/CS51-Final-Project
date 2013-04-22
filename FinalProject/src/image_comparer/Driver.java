@@ -13,18 +13,16 @@ public class Driver
 		MyImage im1 = new MyImage(args[0]);
 		MyImage im2 = new MyImage(args[1]);
 
-		int w1 = im1.getWidth(), w2 = im2.getWidth();
-		int h1 = im1.getHeight(), h2 = im2.getHeight();
 		int width, height;
-		if ((w1 + h1) / 2 < (w2 + h2) / 2)
+		if (MyImage.compare(im1, im2) < 0)
 		{
-			width = w1;
-			height = h1;
+			width = im1.getWidth();
+			height = im1.getHeight();
 		}
 		else
 		{
-			width = w2;
-			height = h2;
+			width = im2.getWidth();
+			height = im2.getHeight();
 		}
 		im1.setSize(width, height);
 		im2.setSize(width, height);

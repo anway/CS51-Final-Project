@@ -18,7 +18,13 @@ public class KeypointComparer implements PixelArrayComparer
 	public double compare(PixelArray a1, PixelArray a2) {
 		int width = a1.getWidth();
 		int height = a1.getHeight();
-		int n = (int)(0.01 * width * height);
+		
+		int dim = width*height;
+		// We want the probability of a collision to be less than 0.5
+		int n = (int) Math.sqrt(dim * 1.386);
+		if (n == 0)
+			n = 1;
+		
 		int numMatched=0, currWidth, currHeight;
 		Random rand = new Random();
 		for (int i=0; i<n; i++) {
@@ -37,8 +43,6 @@ public class KeypointComparer implements PixelArrayComparer
 	public double keypointcompare(PixelArray a1, PixelArray a2, int n) {
 		int width = a1.getWidth();
 		int height = a1.getHeight();
-		//int dimension = width*height;
-		//ArrayList<Double> diffs = new ArrayList<Double>();
 		ArrayList<Integer> xcos = new ArrayList<Integer>();
 		ArrayList<Integer> ycos = new ArrayList<Integer>();
 		float rsum;
@@ -76,7 +80,8 @@ public class KeypointComparer implements PixelArrayComparer
 		}
 		int matched = 0;
 		for (int i=0; i<counter; i++) {
-			if (a1.getPixel(xcos.get(i), ycos.get(i))==a2.getPixel(xcos.get(i), ycos.get(i)))
+			if (a1.getPixel(xcos.get(i), ycos.get(i))==
+					a2.getPixel(xcos.get(i), ycos.get(i)))
 				matched++;
 		}
 

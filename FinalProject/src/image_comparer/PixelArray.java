@@ -71,10 +71,11 @@ public class PixelArray
 				double minDistance = Double.MAX_VALUE;
 				for (int k = 0; k < 8; k++)
 				{
-					int red = redBelow + ((k >> 4) & 0x00000002);
-					int green = greenBelow + ((k >> 2) & 0x00000002);
-					int blue = blueBelow + (k & 0x00000002);
-					int roundedPixel = (red << 4) + (green << 2) + blue;
+					int red = redBelow + ((k >> 2) & 0x00000001) * colorUnit;
+					int green = greenBelow +
+							((k >> 1) & 0x00000001) * colorUnit;
+					int blue = blueBelow + (k & 0x00000001) * colorUnit;
+					int roundedPixel = (red << 16) + (green << 8) + blue;
 					double distance = getDistance(pixel, roundedPixel);
 					if (distance < minDistance)
 					{
