@@ -1,5 +1,8 @@
 package image_comparer;
 
+/*
+ * Constructs histograms to compare two images.
+ */
 public class HistogramComparer implements PixelArrayComparer
 {
 	public HistogramComparer()

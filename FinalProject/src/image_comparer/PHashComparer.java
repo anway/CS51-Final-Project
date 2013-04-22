@@ -1,5 +1,8 @@
 package image_comparer;
 
+/*
+ * Compares two images using perceptual hashing.
+ */
 public class PHashComparer implements PixelArrayComparer
 {
 	public static final int NUM_COLORS = 32;

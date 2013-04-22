@@ -1,11 +1,15 @@
 package image_comparer;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+/*
+ * Handles images.
+ */
 public class MyImage
 {
 	private BufferedImage im;
@@ -17,29 +21,31 @@ public class MyImage
 			im = ImageIO.read(new File(file));
 		} catch (IOException e)
 		{
+			// Throws an exception if not passed a valid image name
 			throw new MyImageException(file);
 		}
 	}
 	
+	/* Gets the width */
 	public int getWidth()
 	{
 		return im.getWidth();
 	}
 	
+	/* Gets the height */
 	public int getHeight()
 	{
 		return im.getHeight();
 	}
 	
-	public double getAspectRatio()
-	{
-		return ((double) getWidth())/((double) getHeight());
-	}
-	
 	/* Scales image */
 	public void setSize(int newx, int newy)
 	{	
-		im = (BufferedImage) im.getScaledInstance(newx, newy, BufferedImage.SCALE_DEFAULT);		
+		BufferedImage imScaled = new BufferedImage(newx, newy,
+				BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2 = imScaled.createGraphics();
+		g2.drawImage(imScaled, null, null);
+		im = imScaled;
 	}
 	
 	/* Returns image as PixelArray */
@@ -56,6 +62,9 @@ public class MyImage
 		return new PixelArray(result);
 	}
 	
+	/*
+	 * The exception to be thrown if passed a bad image name
+	 */
 	class MyImageException extends IOException
 	{
 		private static final long serialVersionUID = 1L;
