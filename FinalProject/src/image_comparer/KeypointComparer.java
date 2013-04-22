@@ -63,11 +63,13 @@ public class KeypointComparer implements PixelArrayComparer
         float gsum;
         float diff;
         int counter = 0;
+        // finds interesting pixels
         for (int i=1;++i<height;) {
             for (int j=1;++j<width;) {
                 rsum = 0;
                 bsum = 0;
                 gsum = 0;
+                // equivalent to box blurring
                 for (int k=-1;k<2;++k) {
                     for (int l=-1;l<2;++l) {
                         rsum += (float) a1.getRed(a1.getPixel(i+k, j+l);
@@ -78,6 +80,7 @@ public class KeypointComparer implements PixelArrayComparer
                 diff = abs(rsum-a1.getRed(a1.getPixel(i, j))
                      +abs(bsum-a1.getBlue(a1.getPixel(i, j))
                      +abs(gsum-a1.getGreen(a1.getPixel(i, j));
+                // 0.2 here is arbitrary, maybe it's too large
                 if (diff > 0.2) {
                     xcos.add(i);
                     ycos.add(j);
@@ -86,9 +89,13 @@ public class KeypointComparer implements PixelArrayComparer
             }
         }
         int n = xcos.size();
+        if (n<20) {
+            return compare(a1, a2, n);
+        }
         for (int i=0; i<n; i++) {
 			if (a1.getPixel(xcos.get(i), ycos.get(j))==a2.getPixel(xcos.get(i), ycos.get(j)))
 				numMatched++;
 		}
+        return (double)numMatched/n;
     }
 }
