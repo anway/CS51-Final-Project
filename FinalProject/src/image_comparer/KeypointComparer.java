@@ -25,7 +25,10 @@ public class KeypointComparer implements PixelArrayComparer
 	 * Pick random x and random y and make sure it's not a repeat
 	 * of already picked point. Then compare and get a percentage
 	 */
-	public double compare(PixelArray a1, PixelArray a2, int n) {
+	public double compare(PixelArray a1, PixelArray a2) {
+		//TODO n is computed how?
+		int n = 0;
+		
 		// we're assuming that height and width of a1 and a2 are
 		// same right??
 		int width = a1.getWidth();
@@ -53,10 +56,10 @@ public class KeypointComparer implements PixelArrayComparer
 	public double keypointcompare(PixelArray a1, PixelArray a2, int n) {
 		int width = a1.getWidth();
 		int height = a1.getHeight();
-		int dimension = width*height;
-		ArrayList<float> diffs = new ArrayList<float>;
-		ArrayList<int> xcos = new ArrayList<int>;
-		ArrayList<int> ycos = new ArrayList<int>;
+		//int dimension = width*height;
+		//ArrayList<Double> diffs = new ArrayList<Double>();
+		ArrayList<Integer> xcos = new ArrayList<Integer>();
+		ArrayList<Integer> ycos = new ArrayList<Integer>();
 		float rsum;
 		float bsum;
 		float gsum;
@@ -69,14 +72,14 @@ public class KeypointComparer implements PixelArrayComparer
 				gsum = 0;
 				for (int k=-1;k<2;++k) {
 					for (int l=-1;l<2;++l) {
-						rsum += (float) a1.getRed(a1.getPixel(i+k, j+l);
-						bsum += (float) a1.getBlue(a1.getPixel(i+k, j+l);
-						gsum += (float) a1.getGreen(a1.getPixel(i+k, j+l);
+						rsum += (float) a1.getRed(a1.getPixel(i+k, j+l));
+						bsum += (float) a1.getBlue(a1.getPixel(i+k, j+l));
+						gsum += (float) a1.getGreen(a1.getPixel(i+k, j+l));
 					}
 				}
-				diff = abs(rsum-a1.getRed(a1.getPixel(i, j))
-						+abs(bsum-a1.getBlue(a1.getPixel(i, j))
-								+abs(gsum-a1.getGreen(a1.getPixel(i, j));
+				diff = Math.abs(rsum-a1.getRed(a1.getPixel(i, j)))
+						+ Math.abs(bsum-a1.getBlue(a1.getPixel(i, j)))
+								+ Math.abs(gsum-a1.getGreen(a1.getPixel(i, j)));
 								if (diff > 0.2) {
 									xcos.add(i);
 									ycos.add(j);
@@ -84,10 +87,12 @@ public class KeypointComparer implements PixelArrayComparer
 								}
 			}
 		}
-		int n = xcos.size();
-		for (int i=0; i<n; i++) {
+		int m = xcos.size();
+		int j = 0;
+		for (int i=0; i<m; i++) {
 			if (a1.getPixel(xcos.get(i), ycos.get(j))==a2.getPixel(xcos.get(i), ycos.get(j)))
-				numMatched++;
+				counter++;
 		}
+		return ((double) counter) / ((double) n);
 	}
 }
