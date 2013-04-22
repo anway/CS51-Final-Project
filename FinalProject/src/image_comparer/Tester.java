@@ -40,24 +40,26 @@ public class Tester
 		MyImage cow2 = new MyImage("images/cow2.gif");
 		MyImage cow3 = new MyImage("images/cow3.bmp");
 		
-		System.out.println("RANDOM KEYPOINT COMPARISON: SAME GIF IMAGE");
+		System.out.println("KEYPOINT MATCHING: SAME GIF IMAGE");
 		System.out.printf("\t%f%n", k.compare(cow1.toPixelArray(),
 				cow1.toPixelArray()));
 		
-		System.out.println("RANDOM KEYPOINT COMPARISON: SAME IMAGE, " +
+		System.out.println("KEYPOINT MATCHING: SAME IMAGE, " +
 				"GIF AND BMP");
 		System.out.printf("\t%f%n", k.compare(cow2.toPixelArray(),
 				cow3.toPixelArray()));
 		
-		System.out.println("RANDOM KEYPOINT COMPARISON: " +
+		System.out.println("KEYPOINT MATCHING: " +
 				"COMPLETELY DIFFERENT IMAGES");
 		im2.setSize(4, 2);
 		p2 = im2.toPixelArray();
 		System.out.printf("\t%f%n", k.compare(p, p2));
 		
-		System.out.println("RANDOM KEYPOINT COMPARISON: SIMILAR IMAGES");
+		System.out.println("KEYPOINT MATCHING: SIMILAR IMAGES");
 		System.out.printf("\t%f%n", k.compare(cow1.toPixelArray(),
 				cow2.toPixelArray()));
+		
+		
 	}
 	
 	private static void printInfo(MyImage im, PixelArray p)

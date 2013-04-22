@@ -3,7 +3,8 @@ import java.util.Random;
 import java.util.*;
 
 /*
- * Matches key points in two images to compare them.
+ * Matches key points in two images to compare them.  Assumes the images are
+ * the same size
  */
 public class KeypointComparer implements PixelArrayComparer
 {
@@ -12,18 +13,22 @@ public class KeypointComparer implements PixelArrayComparer
 
 	}
 
+	public double compare(PixelArray a1, PixelArray a2)
+	{
+		// We want the probability of a collision to be less than 0.5
+		int n = (int) Math.sqrt(a1.getWidth() * a1.getHeight() * 1.386);
+		if (n == 0)
+			n = 1;
+		
+		return completeCompare(a1, a2, n);
+	}
+	
 	/*
 	 * Picks random points in two images and compares them.
 	 */
-	public double compare(PixelArray a1, PixelArray a2) {
+	private double randomCompare(PixelArray a1, PixelArray a2, int n) {
 		int width = a1.getWidth();
 		int height = a1.getHeight();
-		
-		int dim = width*height;
-		// We want the probability of a collision to be less than 0.5
-		int n = (int) Math.sqrt(dim * 1.386);
-		if (n == 0)
-			n = 1;
 		
 		int numMatched=0, currWidth, currHeight;
 		Random rand = new Random();
@@ -40,7 +45,7 @@ public class KeypointComparer implements PixelArrayComparer
 	/*
 	 * Intelligently picks points in two images to compare.
 	 */
-	public double keypointcompare(PixelArray a1, PixelArray a2, int n) {
+	private double completeCompare(PixelArray a1, PixelArray a2, int n) {
 		int width = a1.getWidth();
 		int height = a1.getHeight();
 		ArrayList<Integer> xcos = new ArrayList<Integer>();
