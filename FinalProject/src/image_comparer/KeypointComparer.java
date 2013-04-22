@@ -46,7 +46,8 @@ public class KeypointComparer implements PixelArrayComparer
 		float gsum;
 		float diff;
 		int counter = 0;
-		// finds interesting pixels
+
+        // finds interesting pixels
 		for (int i=1;++i<height;) {
 			for (int j=1;++j<width;) {
 				rsum = 0;
@@ -69,6 +70,7 @@ public class KeypointComparer implements PixelArrayComparer
 				}
 			}
 		}
+
 		if (counter<20) {
 			return compare(a1, a2);
 		}
@@ -77,6 +79,7 @@ public class KeypointComparer implements PixelArrayComparer
 			if (a1.getPixel(xcos.get(i), ycos.get(i))==a2.getPixel(xcos.get(i), ycos.get(i)))
 				matched++;
 		}
+
 		return ((double) matched) / ((double) n);
 	}
 }
