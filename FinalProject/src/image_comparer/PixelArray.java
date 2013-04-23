@@ -31,19 +31,19 @@ public class PixelArray
 	}
     
 	/* Gets the amount of red in a pixel */
-	public int getRed(int pixel)
+	public static int getRed(int pixel)
 	{
 		return (pixel >> 16) & 0x000000FF;
 	}
 	
 	/* Gets the amount of green in a pixel */
-	public int getGreen(int pixel)
+	public static int getGreen(int pixel)
 	{
 		return (pixel >> 8) & 0x000000FF;
 	}
 	
 	/* Gets the amount of blue in a pixel */
-	public int getBlue(int pixel)
+	public static int getBlue(int pixel)
 	{
 		return pixel & 0x000000FF;
 	}
@@ -88,7 +88,7 @@ public class PixelArray
 	}
 	
 	// Helper method to get the distance between two pixels
-	private double getDistance(int p1, int p2)
+	public static double getDistance(int p1, int p2)
 	{
 		double r1 = (double) getRed(p1);
 		double r2 = (double) getRed(p2);

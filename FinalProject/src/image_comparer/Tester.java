@@ -36,30 +36,52 @@ public class Tester
 		System.out.printf("\t%d%n", MyImage.compare(im2, im));
 		
 		KeypointComparer k = new KeypointComparer();
-		MyImage cow1 = new MyImage("images/cow1.gif");
-		MyImage cow2 = new MyImage("images/cow2.gif");
-		MyImage cow3 = new MyImage("images/cow3.bmp");
+		HistogramComparer h = new HistogramComparer();
+		SetComparer s = new SetComparer();
+		PHashComparer pH = new PHashComparer();
 		
-		System.out.println("KEYPOINT MATCHING: SAME GIF IMAGE");
-		System.out.printf("\t%f%n", k.compare(cow1.toPixelArray(),
-				cow1.toPixelArray()));
+		PixelArray cow1 = (new MyImage("images/cow1.gif")).toPixelArray();
+		PixelArray cow2 = (new MyImage("images/cow2.gif")).toPixelArray();
+		PixelArray cow3 = (new MyImage("images/cow3.bmp")).toPixelArray();
 		
-		System.out.println("KEYPOINT MATCHING: SAME IMAGE, " +
-				"GIF AND BMP");
-		System.out.printf("\t%f%n", k.compare(cow2.toPixelArray(),
-				cow3.toPixelArray()));
+		System.out.println("SAME GIF IMAGE");
+		System.out.printf("\tKeypoint matching: %f%n",
+				doComparison(k, cow1, cow1));
+		System.out.printf("\tHistogram comparison: %f%n",
+				doComparison(h, cow1, cow1));
+		System.out.printf("\tSet resemblance: %f%n",
+				doComparison(s, cow1, cow1));
+		System.out.printf("\tPerceptual hash: %f%n",
+				doComparison(pH, cow1, cow1));
 		
-		System.out.println("KEYPOINT MATCHING: " +
-				"COMPLETELY DIFFERENT IMAGES");
+		System.out.println("SAME IMAGE, GIF AND BMP");
+		System.out.printf("\tKeypoint matching: %f%n",
+				doComparison(k, cow2, cow3));
+		System.out.printf("\tHistogram comparison: %f%n",
+				doComparison(h, cow2, cow3));
+		System.out.printf("\tSet resemblance: %f%n",
+				doComparison(s, cow2, cow3));
+		System.out.printf("\tPerceptual hash: %f%n",
+				doComparison(pH, cow2, cow3));
+		
+		System.out.println("COMPLETELY DIFFERENT IMAGES");
 		im2.setSize(4, 2);
 		p2 = im2.toPixelArray();
-		System.out.printf("\t%f%n", k.compare(p, p2));
+		System.out.printf("\tKeypoint matching: %f%n", doComparison(k, p, p2));
+		System.out.printf("\tHistogram comparison: %f%n",
+				doComparison(h, p, p2));
+		System.out.printf("\tSet resemblance: %f%n", doComparison(s, p, p2));
+		System.out.printf("\tPerceptual hash: %f%n", doComparison(pH, p, p2));
 		
-		System.out.println("KEYPOINT MATCHING: SIMILAR IMAGES");
-		System.out.printf("\t%f%n", k.compare(cow1.toPixelArray(),
-				cow2.toPixelArray()));
-		
-		
+		System.out.println("SIMILAR IMAGES");
+		System.out.printf("\tKeypoint matching: %f%n",
+				doComparison(k, cow1, cow2));
+		System.out.printf("\tHistogram comparison: %f%n",
+				doComparison(h, cow1, cow2));
+		System.out.printf("\tSet resemblance: %f%n",
+				doComparison(s, cow1, cow2));
+		System.out.printf("\tPerceptual hash: %f%n",
+				doComparison(pH, cow1, cow2));
 	}
 	
 	private static void printInfo(MyImage im, PixelArray p)
@@ -71,12 +93,18 @@ public class Tester
 			for (int x = 0, m = p.getWidth(); x < m; x++)
 			{
 				int pixel = p.getPixel(x, y);
-				int red = p.getRed(pixel);
-				int green = p.getGreen(pixel);
-				int blue = p.getBlue(pixel);
+				int red = PixelArray.getRed(pixel);
+				int green = PixelArray.getGreen(pixel);
+				int blue = PixelArray.getBlue(pixel);
 				System.out.printf("\t%3d %3d %3d", red, green, blue);
 			}
 			System.out.print("\n");
 		}
+	}
+	
+	private static double doComparison(PixelArrayComparer c, PixelArray p1,
+			PixelArray p2)
+	{
+		return c.compare(p1, p2);
 	}
 }

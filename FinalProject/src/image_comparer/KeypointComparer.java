@@ -19,17 +19,17 @@ public class KeypointComparer implements PixelArrayComparer
 		int n = (int) Math.sqrt(a1.getWidth() * a1.getHeight() * 1.386);
 		if (n == 0)
 			n = 1;
-		
+
 		return completeCompare(a1, a2, n);
 	}
-	
+
 	/*
 	 * Picks random points in two images and compares them.
 	 */
 	private double randomCompare(PixelArray a1, PixelArray a2, int n) {
 		int width = a1.getWidth();
 		int height = a1.getHeight();
-		
+
 		int numMatched=0, currWidth, currHeight;
 		Random rand = new Random();
 		for (int i=0; i<n; i++) {
@@ -50,13 +50,13 @@ public class KeypointComparer implements PixelArrayComparer
 		int height = a1.getHeight();
 		ArrayList<Integer> xcos = new ArrayList<Integer>();
 		ArrayList<Integer> ycos = new ArrayList<Integer>();
-		float rsum;
-		float bsum;
-		float gsum;
-		float diff;
+		double rsum;
+		double bsum;
+		double gsum;
+		double diff;
 		int counter = 0;
 
-        // finds interesting pixels
+		// finds interesting pixels
 		for (int i=1;++i<height;) {
 			for (int j=1;++j<width;) {
 				rsum = 0;
@@ -64,15 +64,20 @@ public class KeypointComparer implements PixelArrayComparer
 				gsum = 0;
 				for (int k=-1;k<2;++k) {
 					for (int l=-1;l<2;++l) {
-						rsum += (float) a1.getRed(a1.getPixel(i+k, j+l));
-						bsum += (float) a1.getBlue(a1.getPixel(i+k, j+l));
-						gsum += (float) a1.getGreen(a1.getPixel(i+k, j+l));
+						rsum += (double)
+								PixelArray.getRed(a1.getPixel(i+k, j+l));
+						bsum += (double)
+								PixelArray.getBlue(a1.getPixel(i+k, j+l));
+						gsum += (double)
+								PixelArray.getGreen(a1.getPixel(i+k, j+l));
 					}
 				}
-				diff = Math.abs(rsum-a1.getRed(a1.getPixel(i, j)))
-						+ Math.abs(bsum-a1.getBlue(a1.getPixel(i, j)))
-						+ Math.abs(gsum-a1.getGreen(a1.getPixel(i, j)));
-				if (diff > 0.2) {
+				rsum /= 9.0; bsum /= 9.0; gsum /= 9.0;
+				diff = (Math.abs(rsum-PixelArray.getRed(a1.getPixel(i, j)))
+						+ Math.abs(bsum-PixelArray.getBlue(a1.getPixel(i, j)))
+						+ Math.abs(gsum-
+								PixelArray.getGreen(a1.getPixel(i, j))))/768.0;
+				if (diff > 0.1) {
 					xcos.add(i);
 					ycos.add(j);
 					++counter;
@@ -81,7 +86,7 @@ public class KeypointComparer implements PixelArrayComparer
 		}
 
 		if (counter<20) {
-			return compare(a1, a2);
+			return randomCompare(a1, a2, n);
 		}
 		int matched = 0;
 		for (int i=0; i<counter; i++) {
@@ -90,6 +95,6 @@ public class KeypointComparer implements PixelArrayComparer
 				matched++;
 		}
 
-		return ((double) matched) / ((double) n);
+		return ((double) matched) / ((double) counter);
 	}
 }
