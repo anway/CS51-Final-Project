@@ -58,8 +58,8 @@ public class MyImage
 		int h = im.getHeight();
 		int [][] result = new int[h][w];
 		
-		for (int row = 0; row < h; row++) {
-		  for (int col = 0; col < w; col++) 
+		for (int row = 0; row < h; ++row) {
+		  for (int col = 0; col < w; ++col) 
 			result[row][col] = im.getRGB(col, row);
 		}
 		return new PixelArray(result);

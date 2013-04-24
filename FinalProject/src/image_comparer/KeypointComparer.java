@@ -32,12 +32,12 @@ public class KeypointComparer implements PixelArrayComparer
 
 		int numMatched=0, currWidth, currHeight;
 		Random rand = new Random();
-		for (int i=0; i<n; i++) {
+		for (int i=0; i<n; ++i) {
 			currWidth = rand.nextInt(width);
 			currHeight = rand.nextInt(height);
 			if (a1.getPixel(currWidth, currHeight)==
 					a2.getPixel(currWidth, currHeight))
-				numMatched++;
+				++numMatched;
 		}
 		return (double)numMatched/n;
 	}
@@ -57,26 +57,26 @@ public class KeypointComparer implements PixelArrayComparer
 		int counter = 0;
 
 		// finds interesting pixels
-		for (int i=1;++i<height;) {
-			for (int j=1;++j<width;) {
+		for (int i=1;++i<width-1;) {
+			for (int j=1;++j<height-1;) {
 				rsum = 0;
 				bsum = 0;
 				gsum = 0;
 				for (int k=-1;k<2;++k) {
 					for (int l=-1;l<2;++l) {
 						rsum += (double)
-								PixelArray.getRed(a1.getPixel(i+k, j+l));
+							PixelArray.getRed(a1.getPixel(i+k, j+l));
 						bsum += (double)
-								PixelArray.getBlue(a1.getPixel(i+k, j+l));
+							PixelArray.getBlue(a1.getPixel(i+k, j+l));
 						gsum += (double)
-								PixelArray.getGreen(a1.getPixel(i+k, j+l));
+							PixelArray.getGreen(a1.getPixel(i+k, j+l));
 					}
 				}
 				rsum /= 9.0; bsum /= 9.0; gsum /= 9.0;
 				diff = (Math.abs(rsum-PixelArray.getRed(a1.getPixel(i, j)))
-						+ Math.abs(bsum-PixelArray.getBlue(a1.getPixel(i, j)))
-						+ Math.abs(gsum-
-								PixelArray.getGreen(a1.getPixel(i, j))))/768.0;
+					+ Math.abs(bsum-PixelArray.getBlue(a1.getPixel(i, j)))
+					+ Math.abs(gsum
+						- PixelArray.getGreen(a1.getPixel(i, j))))/768.0;
 				if (diff > 0.1) {
 					xcos.add(i);
 					ycos.add(j);
@@ -89,10 +89,10 @@ public class KeypointComparer implements PixelArrayComparer
 			return randomCompare(a1, a2, n);
 		}
 		int matched = 0;
-		for (int i=0; i<counter; i++) {
+		for (int i=0; i<counter; ++i) {
 			if (a1.getPixel(xcos.get(i), ycos.get(i))==
 					a2.getPixel(xcos.get(i), ycos.get(i)))
-				matched++;
+				++matched;
 		}
 
 		return ((double) matched) / ((double) counter);

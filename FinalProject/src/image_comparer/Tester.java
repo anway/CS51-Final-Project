@@ -40,9 +40,15 @@ public class Tester
 		SetComparer s = new SetComparer();
 		PHashComparer pH = new PHashComparer();
 		
-		PixelArray cow1 = (new MyImage("images/cow1.gif")).toPixelArray();
-		PixelArray cow2 = (new MyImage("images/cow2.gif")).toPixelArray();
-		PixelArray cow3 = (new MyImage("images/cow3.bmp")).toPixelArray();
+		MyImage image1 = new MyImage("images/cow1.gif");
+		MyImage image2 = new MyImage("images/cow2.gif");
+		MyImage image3 = new MyImage("images/cow3.bmp");
+		image1.setSize(32, 32);
+		image2.setSize(32, 32);
+		image3.setSize(32, 32);
+		PixelArray cow1 = image1.toPixelArray();
+		PixelArray cow2 = image2.toPixelArray();
+		PixelArray cow3 = image3.toPixelArray();
 		
 		System.out.println("SAME GIF IMAGE");
 		System.out.printf("\tKeypoint matching: %f%n",
@@ -88,9 +94,9 @@ public class Tester
 	{
 		System.out.printf("Width: %d %d%n", im.getWidth(), p.getWidth());
 		System.out.printf("Height: %d %d%n", im.getHeight(), p.getHeight());
-		for (int y = 0, n = p.getHeight(); y < n; y++)
+		for (int y = 0, n = p.getHeight(); y < n; ++y)
 		{
-			for (int x = 0, m = p.getWidth(); x < m; x++)
+			for (int x = 0, m = p.getWidth(); x < m; ++x)
 			{
 				int pixel = p.getPixel(x, y);
 				int red = PixelArray.getRed(pixel);

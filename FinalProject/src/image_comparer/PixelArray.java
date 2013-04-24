@@ -60,8 +60,8 @@ public class PixelArray
 		int w = getWidth();
 		int h = getHeight();
 		int[][] roundedArray = new int[h][w];
-		for (int i = 0; i < w; i++)
-			for (int j = 0; j < h; j++)
+		for (int i = 0; i < w; ++i)
+			for (int j = 0; j < h; ++j)
 			{
 				int pixel = getPixel(i, j);
 				int redBelow = (getRed(pixel)/colorUnit) * colorUnit;
@@ -69,7 +69,7 @@ public class PixelArray
 				int blueBelow = (getBlue(pixel)/colorUnit) * colorUnit;
 				
 				double minDistance = Double.MAX_VALUE;
-				for (int k = 0; k < 8; k++)
+				for (int k = 0; k < 8; ++k)
 				{
 					int red = redBelow + ((k >> 2) & 0x00000001) * colorUnit;
 					int green = greenBelow +
