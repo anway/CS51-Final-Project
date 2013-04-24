@@ -29,6 +29,9 @@ public class SetComparer implements PixelArrayComparer
 		return (double) matches / (double) 100;
 	}
 
+	/*
+	 * Associates a ``sketch'' (an id) with a pixel array
+	 */
 	public static int[] getSketch(PixelArray p)
 	{
 		int[] sketch = new int[SKETCH_SIZE];
@@ -46,6 +49,9 @@ public class SetComparer implements PixelArrayComparer
 		return sketch;
 	}
 	
+	/*
+	 * Breaks (shingles) the image into overlapping 4x4 blocks and hashes each
+	 */
 	public static Boolean[] shingle(PixelArray p)
 	{
 		Boolean[] shingles = new Boolean[4096];
@@ -55,6 +61,7 @@ public class SetComparer implements PixelArrayComparer
 		for (int i = 0, n = p.getWidth() - (size-1); i < n; ++i)
 			for (int j = 0, m = p.getHeight() - (size-1); j < m; ++j)
 			{
+				// Jenkins' one-at-a-time hash
 				long shingle = 0;
 				for (int k = 0; k < size; ++k)
 					for (int l = 0; l < size; ++l)
@@ -64,10 +71,6 @@ public class SetComparer implements PixelArrayComparer
 						shingle += shingle << 10;
 						shingle ^= shingle >> 6;
 					}
-				
-				shingle += (shingle << 3);
-				shingle ^= (shingle >> 11);
-				shingle += (shingle << 15);
 				
 				shingle += (shingle << 3);
 				shingle ^= (shingle >> 11);
