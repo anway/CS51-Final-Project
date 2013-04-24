@@ -7,25 +7,14 @@ import java.io.IOException;
  * similarity based on four comparison algorithms.
  */
 public class Driver
-{
+{	
 	public static void main(String[] args) throws IOException
 	{
 		MyImage im1 = new MyImage(args[0]);
 		MyImage im2 = new MyImage(args[1]);
 
-		int width, height;
-		if (MyImage.compare(im1, im2) < 0)
-		{
-			width = im1.getWidth();
-			height = im1.getHeight();
-		}
-		else
-		{
-			width = im2.getWidth();
-			height = im2.getHeight();
-		}
-		im1.setSize(width, height);
-		im2.setSize(width, height);
+		im1.setSize(32, 32);
+		im2.setSize(32, 32);
 		PixelArray a1 = im1.toPixelArray();
 		PixelArray a2 = im2.toPixelArray();
 

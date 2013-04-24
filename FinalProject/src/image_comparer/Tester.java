@@ -42,52 +42,104 @@ public class Tester
 		
 		MyImage image1 = new MyImage("images/cow1.gif");
 		MyImage image2 = new MyImage("images/cow2.gif");
-		MyImage image3 = new MyImage("images/cow3.bmp");
+		MyImage image3 = new MyImage("images/cow3.gif");
+		MyImage image4 = new MyImage("images/kenshin1.jpg");
+		MyImage image5 = new MyImage("images/kenshin2.jpg");
+		MyImage image6 = new MyImage("images/kenshin3.jpg");
+		MyImage image7 = new MyImage("images/kenshin4.jpg");
 		image1.setSize(32, 32);
 		image2.setSize(32, 32);
 		image3.setSize(32, 32);
+		image4.setSize(32, 32);
+		image5.setSize(32, 32);
+		image6.setSize(32, 32);
+		image7.setSize(32, 32);
 		PixelArray cow1 = image1.toPixelArray();
 		PixelArray cow2 = image2.toPixelArray();
 		PixelArray cow3 = image3.toPixelArray();
+		PixelArray kenshin1 = image4.toPixelArray();
+		PixelArray kenshin2 = image5.toPixelArray();
+		PixelArray kenshin3 = image6.toPixelArray();
+		PixelArray kenshin4 = image7.toPixelArray();
 		
-		System.out.println("SAME GIF IMAGE");
+		System.out.println("SAME 32x32 GIF IMAGE");
 		System.out.printf("\tKeypoint matching: %f%n",
-				doComparison(k, cow1, cow1));
+			doComparison(k, cow1, cow1));
 		System.out.printf("\tHistogram comparison: %f%n",
-				doComparison(h, cow1, cow1));
+			doComparison(h, cow1, cow1));
 		System.out.printf("\tSet resemblance: %f%n",
-				doComparison(s, cow1, cow1));
+			doComparison(s, cow1, cow1));
 		System.out.printf("\tPerceptual hash: %f%n",
-				doComparison(pH, cow1, cow1));
+			doComparison(pH, cow1, cow1));
 		
-		System.out.println("SAME IMAGE, GIF AND BMP");
-		System.out.printf("\tKeypoint matching: %f%n",
-				doComparison(k, cow2, cow3));
-		System.out.printf("\tHistogram comparison: %f%n",
-				doComparison(h, cow2, cow3));
-		System.out.printf("\tSet resemblance: %f%n",
-				doComparison(s, cow2, cow3));
-		System.out.printf("\tPerceptual hash: %f%n",
-				doComparison(pH, cow2, cow3));
-		
-		System.out.println("COMPLETELY DIFFERENT IMAGES");
+		System.out.println("COMPLETELY DIFFERENT 4x2 IMAGES");
 		im2.setSize(4, 2);
 		p2 = im2.toPixelArray();
 		System.out.printf("\tKeypoint matching: %f%n", doComparison(k, p, p2));
 		System.out.printf("\tHistogram comparison: %f%n",
-				doComparison(h, p, p2));
+			doComparison(h, p, p2));
 		System.out.printf("\tSet resemblance: %f%n", doComparison(s, p, p2));
 		System.out.printf("\tPerceptual hash: %f%n", doComparison(pH, p, p2));
 		
-		System.out.println("SIMILAR IMAGES");
+		System.out.println("COMPLETELY DIFFERENT 32x32 IMAGES");
 		System.out.printf("\tKeypoint matching: %f%n",
-				doComparison(k, cow1, cow2));
+			doComparison(k, cow2, kenshin1));
 		System.out.printf("\tHistogram comparison: %f%n",
-				doComparison(h, cow1, cow2));
+			doComparison(h, cow2, kenshin1));
 		System.out.printf("\tSet resemblance: %f%n",
-				doComparison(s, cow1, cow2));
+			doComparison(s, cow2, kenshin1));
 		System.out.printf("\tPerceptual hash: %f%n",
-				doComparison(pH, cow1, cow2));
+			doComparison(pH, cow2, kenshin1));
+		
+		System.out.println("SOMEWHAT SIMILAR 32x32 IMAGES");
+		System.out.printf("\tKeypoint matching: %f%n",
+			doComparison(k, cow1, cow2));
+		System.out.printf("\tHistogram comparison: %f%n",
+			doComparison(h, cow1, cow2));
+		System.out.printf("\tSet resemblance: %f%n",
+			doComparison(s, cow1, cow2));
+		System.out.printf("\tPerceptual hash: %f%n",
+			doComparison(pH, cow1, cow2));
+		
+		System.out.println("EXTREMELY SIMILAR 32x32 IMAGES");
+		System.out.printf("\tKeypoint matching: %f%n",
+			doComparison(k, cow2, cow3));
+		System.out.printf("\tHistogram comparison: %f%n",
+			doComparison(h, cow2, cow3));
+		System.out.printf("\tSet resemblance: %f%n",
+			doComparison(s, cow2, cow3));
+		System.out.printf("\tPerceptual hash: %f%n",
+			doComparison(pH, cow2, cow3));
+		
+		System.out.println("CROPPED 32x32 IMAGE");
+		System.out.printf("\tKeypoint matching: %f%n",
+			doComparison(k, kenshin1, kenshin2));
+		System.out.printf("\tHistogram comparison: %f%n",
+			doComparison(h, kenshin1, kenshin2));
+		System.out.printf("\tSet resemblance: %f%n",
+			doComparison(s, kenshin1, kenshin2));
+		System.out.printf("\tPerceptual hash: %f%n",
+			doComparison(pH, kenshin1, kenshin2));
+		
+		System.out.println("ROTATED 32x32 IMAGE");
+		System.out.printf("\tKeypoint matching: %f%n",
+			doComparison(k, kenshin1, kenshin3));
+		System.out.printf("\tHistogram comparison: %f%n",
+			doComparison(h, kenshin1, kenshin3));
+		System.out.printf("\tSet resemblance: %f%n",
+			doComparison(s, kenshin1, kenshin3));
+		System.out.printf("\tPerceptual hash: %f%n",
+			doComparison(pH, kenshin1, kenshin3));
+		
+		System.out.println("REFLECTED 32x32 IMAGE");
+		System.out.printf("\tKeypoint matching: %f%n",
+			doComparison(k, kenshin1, kenshin4));
+		System.out.printf("\tHistogram comparison: %f%n",
+			doComparison(h, kenshin1, kenshin4));
+		System.out.printf("\tSet resemblance: %f%n",
+			doComparison(s, kenshin1, kenshin4));
+		System.out.printf("\tPerceptual hash: %f%n",
+			doComparison(pH, kenshin1, kenshin4));
 	}
 	
 	private static void printInfo(MyImage im, PixelArray p)

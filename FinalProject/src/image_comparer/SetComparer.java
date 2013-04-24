@@ -16,7 +16,6 @@ public class SetComparer implements PixelArrayComparer
 		
 	}
 	
-	//TODO
 	public double compare(PixelArray a1, PixelArray a2)
 	{
 		int[] sketch1 = getSketch(a1);
@@ -30,7 +29,7 @@ public class SetComparer implements PixelArrayComparer
 		return (double) matches / (double) 100;
 	}
 
-	public int[] getSketch(PixelArray p)
+	public static int[] getSketch(PixelArray p)
 	{
 		int[] sketch = new int[SKETCH_SIZE];
 		
@@ -47,27 +46,34 @@ public class SetComparer implements PixelArrayComparer
 		return sketch;
 	}
 	
-	public Boolean[] shingle(PixelArray p)
+	public static Boolean[] shingle(PixelArray p)
 	{
-		Boolean[] shingles = new Boolean[256];
+		Boolean[] shingles = new Boolean[4096];
 		for (int i = 0; i < shingles.length; i++)
 			shingles[i] = false;
 		int size = Math.min(Math.min(p.getWidth(), p.getHeight()), 4);
 		for (int i = 0, n = p.getWidth() - (size-1); i < n; ++i)
 			for (int j = 0, m = p.getHeight() - (size-1); j < m; ++j)
 			{
-				int shingle = 0;
+				long shingle = 0;
 				for (int k = 0; k < size; ++k)
 					for (int l = 0; l < size; ++l)
 					{
 						int pixel = p.getPixel(i+k, j+l);
-						int gray = (PixelArray.getRed(pixel) +
-							PixelArray.getGreen(pixel) +
-							PixelArray.getBlue(pixel))/3;
-						shingle = (k==0 && l==0) ? gray :
-							shingle ^ gray;
+						shingle += pixel;
+						shingle += shingle << 10;
+						shingle ^= shingle >> 6;
 					}
-				shingles[shingle] = true;
+				
+				shingle += (shingle << 3);
+				shingle ^= (shingle >> 11);
+				shingle += (shingle << 15);
+				
+				shingle += (shingle << 3);
+				shingle ^= (shingle >> 11);
+				shingle += (shingle << 15);
+				
+				shingles[(int)(shingle & 0x00000FFF)] = true;
 			}
 		return shingles;
 	}
