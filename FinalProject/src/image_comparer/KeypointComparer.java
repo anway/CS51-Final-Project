@@ -84,7 +84,7 @@ public class KeypointComparer implements PixelArrayComparer
 					+ Math.abs(rsum-PixelArray.getRed(pixel))
 					+ Math.abs(bsum-PixelArray.getBlue(pixel))
 					+ Math.abs(gsum
-						- PixelArray.getGreen(pixel)))/768.0;
+						- PixelArray.getGreen(pixel)))/1024.0;
 				if (diff > 0.1) {
 					xcos.add(i);
 					ycos.add(j);
