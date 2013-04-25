@@ -7,7 +7,7 @@ import java.io.IOException;
  * similarity based on four comparison algorithms.
  */
 public class Driver
-{	
+{
 	public static void main(String[] args) throws IOException
 	{
 		MyImage im1 = new MyImage(args[0]);

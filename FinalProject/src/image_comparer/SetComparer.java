@@ -26,7 +26,7 @@ public class SetComparer implements PixelArrayComparer
 			if (sketch1[i] == sketch2[i])
 				++matches;
 		
-		return (double) matches / (double) 100;
+		return (double) matches / (double) SKETCH_SIZE;
 	}
 
 	/*

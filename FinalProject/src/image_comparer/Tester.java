@@ -7,8 +7,8 @@ public class Tester
 {
 	public static void main(String[] args) throws MyImage.MyImageException
 	{
-		System.out.println("TESTING A 10x5 RED AND BLACK PNG IMAGE");
-		MyImage im = new MyImage("images/red_black.png");
+		System.out.println("TESTING A 10x5 RED AND BLACK IMAGE");
+		MyImage im = new MyImage("images/red_black.gif");
 		PixelArray p = im.toPixelArray();
 		printInfo(im, p);
 		
@@ -17,14 +17,13 @@ public class Tester
 		p = im.toPixelArray();
 		printInfo(im, p);
 		
-		System.out.println("TESTING AN 8x10 GRADIENT JPEG IMAGE");
-		MyImage im2 = new MyImage("images/gradient.jpg");
+		System.out.println("TESTING AN 8x10 GRADIENT IMAGE");
+		MyImage im2 = new MyImage("images/gradient.gif");
 		PixelArray p2 = im2.toPixelArray();
 		printInfo(im2, p2);
 		
 		System.out.println("ROUNDING THE PIXEL ARRAY");
-		p2 = p2.round(32);
-		printInfo(im2, p2);
+		printInfo(im2, p2.round(32));
 		
 		System.out.println("MYIMAGE.COMPARE: SAME SIZE IMAGES");
 		System.out.printf("\t%d%n", MyImage.compare(im, im));
@@ -43,10 +42,10 @@ public class Tester
 		MyImage image1 = new MyImage("images/cow1.gif");
 		MyImage image2 = new MyImage("images/cow2.gif");
 		MyImage image3 = new MyImage("images/cow3.gif");
-		MyImage image4 = new MyImage("images/kenshin1.jpg");
-		MyImage image5 = new MyImage("images/kenshin2.jpg");
-		MyImage image6 = new MyImage("images/kenshin3.jpg");
-		MyImage image7 = new MyImage("images/kenshin4.jpg");
+		MyImage image4 = new MyImage("images/kenshin1.gif");
+		MyImage image5 = new MyImage("images/kenshin2.gif");
+		MyImage image6 = new MyImage("images/kenshin3.gif");
+		MyImage image7 = new MyImage("images/kenshin4.gif");
 		image1.setSize(32, 32);
 		image2.setSize(32, 32);
 		image3.setSize(32, 32);
@@ -72,8 +71,12 @@ public class Tester
 		System.out.printf("\tPerceptual hash: %f%n",
 			doComparison(pH, cow1, cow1));
 		
-		System.out.println("COMPLETELY DIFFERENT 4x2 IMAGES");
-		im2.setSize(4, 2);
+		System.out.println("COMPLETELY DIFFERENT IMAGES, ENLARGED TO 32x32");
+		im = new MyImage("images/red_black.gif");
+		im.setSize(32, 32);
+		p = im.toPixelArray();
+		im2 = new MyImage("images/gradient.gif");
+		im2.setSize(32, 32);
 		p2 = im2.toPixelArray();
 		System.out.printf("\tKeypoint matching: %f%n", doComparison(k, p, p2));
 		System.out.printf("\tHistogram comparison: %f%n",
@@ -81,7 +84,7 @@ public class Tester
 		System.out.printf("\tSet resemblance: %f%n", doComparison(s, p, p2));
 		System.out.printf("\tPerceptual hash: %f%n", doComparison(pH, p, p2));
 		
-		System.out.println("COMPLETELY DIFFERENT 32x32 IMAGES");
+		System.out.println("COMPLETELY DIFFERENT IMAGES, SHRUNK TO 32x32");
 		System.out.printf("\tKeypoint matching: %f%n",
 			doComparison(k, cow2, kenshin1));
 		System.out.printf("\tHistogram comparison: %f%n",
@@ -151,10 +154,12 @@ public class Tester
 			for (int x = 0, m = p.getWidth(); x < m; ++x)
 			{
 				int pixel = p.getPixel(x, y);
+				int alpha = PixelArray.getAlpha(pixel);
 				int red = PixelArray.getRed(pixel);
 				int green = PixelArray.getGreen(pixel);
 				int blue = PixelArray.getBlue(pixel);
-				System.out.printf("\t%3d %3d %3d", red, green, blue);
+				System.out.printf("\t\t%3d %3d %3d %3d",
+					alpha, red, green, blue);
 			}
 			System.out.print("\n");
 		}

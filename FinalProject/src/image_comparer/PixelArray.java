@@ -30,6 +30,11 @@ public class PixelArray
 		return pixels[y][x];
 	}
     
+	public static int getAlpha(int pixel)
+	{
+		return (pixel >> 24) & 0x000000FF;
+	}
+	
 	/* Gets the amount of red in a pixel */
 	public static int getRed(int pixel)
 	{
@@ -80,7 +85,8 @@ public class PixelArray
 					if (distance < minDistance)
 					{
 						minDistance = distance;
-						roundedArray[j][i] = roundedPixel;
+						roundedArray[j][i] = (PixelArray.getAlpha(pixel) << 24)
+							+ roundedPixel;
 					}
 				}
 			}
