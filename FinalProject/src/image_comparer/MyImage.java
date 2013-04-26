@@ -15,16 +15,20 @@ public class MyImage
 {
 	private BufferedImage im;
 
-	public MyImage(String file) throws MyImageException
+	public MyImage(File file) throws MyImageException
 	{
 		try
 		{
-			im = ImageIO.read(new File(file));
+			im = ImageIO.read(file);
 		} catch (IOException e)
 		{
-			// Throws an exception if not passed a valid image name
-			throw new MyImageException(file);
+			throw new MyImageException(file.getName());
 		}
+	}
+	
+	public MyImage(String fileName) throws MyImageException
+	{
+		this(new File(fileName));
 	}
 
 	/* Gets the width */
@@ -79,7 +83,7 @@ public class MyImage
 	{
 		private static final long serialVersionUID = 1L;
 
-		public MyImageException(String file)
+		MyImageException(String file)
 		{
 			super(file + " is not an image file in a supported format");
 		}

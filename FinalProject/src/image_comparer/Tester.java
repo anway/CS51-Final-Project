@@ -61,7 +61,7 @@ public class Tester
 		PixelArray kenshin3 = image6.toPixelArray();
 		PixelArray kenshin4 = image7.toPixelArray();
 		
-		System.out.println("SAME 32x32 GIF IMAGE");
+		System.out.println("SAME 32x32 IMAGE");
 		System.out.printf("\tKeypoint matching: %f%n",
 			doComparison(k, cow1, cow1));
 		System.out.printf("\tHistogram comparison: %f%n",

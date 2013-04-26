@@ -98,8 +98,8 @@ public class KeypointComparer implements PixelArrayComparer
 		}
 		int matched = 0;
 		for (int i=0; i<counter; ++i) {
-			if (a1.getPixel(xcos.get(i), ycos.get(i))==
-					a2.getPixel(xcos.get(i), ycos.get(i)))
+			if (PixelArray.getDistance(a1.getPixel(xcos.get(i), ycos.get(i)),
+					a2.getPixel(xcos.get(i), ycos.get(i))) < 20.)
 				++matched;
 		}
 
