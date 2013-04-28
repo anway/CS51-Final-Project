@@ -19,10 +19,10 @@ public class HistogramComparer implements PixelArrayComparer
 		for (int i=0; i<width; i++){
 			for (int j=0; j<height; j++){
 				currPixel = a.getPixel(i, j);
-				red += PixelArray.getRed(currPixel);
-				green += PixelArray.getGreen(currPixel);
-				blue += PixelArray.getBlue(currPixel);
-				alpha += PixelArray.getAlpha(currPixel);
+				rgba[0] += PixelArray.getRed(currPixel);
+				rgba[1] += PixelArray.getGreen(currPixel);
+				rgba[2] += PixelArray.getBlue(currPixel);
+				rgba[3] += PixelArray.getAlpha(currPixel);
 			}
 		}
 		rgba[0] /= (height*width*255);
@@ -35,8 +35,8 @@ public class HistogramComparer implements PixelArrayComparer
 	//TODO
 	public double compare(PixelArray a1, PixelArray a2)
 	{
-		int a1Rgba = new int[4];
-		int a2Rgba = new int[4];
+		int[] a1Rgba = new int[4];
+		int[] a2Rgba = new int[4];
 		a1Rgba = processImage(a1);
 		a2Rgba = processImage(a2);
 		int difference = 0;
