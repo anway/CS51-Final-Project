@@ -29,7 +29,7 @@ public class PHashComparer implements PixelArrayComparer
         for (int i=0;i<w;++i) {
             for (int j=0;j<h;++j) {
                 pixel = a1.getPixel(i, j);
-                temp = ((getBlue(pixel)+getBlue(pixel)+getGreen(pixel))/12);
+                temp = ((PixelArray.getBlue(pixel)+PixelArray.getBlue(pixel)+PixelArray.getGreen(pixel))/12);
                 sum1 += temp;
                 grayArray1[j][i] = temp;
             }
@@ -38,7 +38,7 @@ public class PHashComparer implements PixelArrayComparer
         for (int i=0;i<w;++i) {
             for (int j=0;j<h;++j) {
                 pixel = a2.getPixel(i, j);
-                temp = ((getBlue(pixel)+getBlue(pixel)+getGreen(pixel))/12);
+                temp = ((PixelArray.getBlue(pixel)+PixelArray.getBlue(pixel)+PixelArray.getGreen(pixel))/12);
                 sum2 += temp;
                 grayArray2[j][i] = temp;
             }
@@ -53,7 +53,7 @@ public class PHashComparer implements PixelArrayComparer
                 }
             }
         }
-		return (double(matches)/double(dimension));
+            return (((double) matches)/((double) dimension));
 	}
 
 }
