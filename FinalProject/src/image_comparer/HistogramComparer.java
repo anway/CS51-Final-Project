@@ -82,9 +82,72 @@ public class HistogramComparer implements PixelArrayComparer
 		return (1.0-difference)/1.0;
 	}
 	
+	public double[] processImage3(PixelArray a)
+	{
+		double[] rgba = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0};
+		int width = a.getWidth();
+		int height = a.getHeight();
+		int currPixel = 0, currRed=0, currGreen=0, currBlue=0;
+		for (int i=0; i<width; i++){
+			for (int j=0; j<height; j++){
+				currPixel = a.getPixel(i, j);
+				currRed = PixelArray.getRed(currPixel);
+				if (currRed>0 && currRed<51)
+					rgba[0]++;
+				if (currRed>50 && currRed<102)
+					rgba[1]++;
+				if (currRed>101 && curRed<153)
+					rgba[2]++;
+				if (currRed>152 && currRed<204)
+					rgba[3]++;
+				if (currRed>203 && currRed<=255)
+					rgba[4]++;
+				currGreen = PixelArray.getGreen(currPixel);
+				if (currGreen>0 && currGreen<51)
+					rgba[5]++;
+				if (currGreen>50 && currGreen<102)
+					rgba[6]++;
+				if (currGreen>101 && curGreen<153)
+					rgba[7]++;
+				if (currGreen>152 && currGreen<204)
+					rgba[8]++;
+				if (currGreen>203 && currGreen<=255)
+					rgba[9]++;
+				currBlue = PixelArray.getBlue(currPixel);
+				if (currBlue>0 && currBlue<51)
+					rgba[10]++;
+				if (currBlue>50 && currBlue<102)
+					rgba[11]++;
+				if (currBlue>101 && curBlue<153)
+					rgba[12]++;
+				if (currBlue>152 && currBlue<204)
+					rgba[13]++;
+				if (currBlue>203 && currBlue<=255)
+					rgba[14]++;
+			}
+		}
+		rgba[0] = (double)rgba[0]/(height*width*51.0);
+		rgba[1] = (double)rgba[1]/(height*width*51.0);
+		rgba[2] = (double)rgba[2]/(height*width*51.0);
+		return rgba;
+	}
+	
+	public double compare3(PixelArray a1, PixelArray a2)
+	{
+		double[] a1Rgba = new double[15];
+		double[] a2Rgba = new double[15];
+		a1Rgba = processImage1(a1);
+		a2Rgba = processImage1(a2);
+		double difference = 0.0;
+		for (int i=0; i<15; i++){
+			difference += Math.abs(a1Rgba[i] - a2Rgba[i]);
+		}
+		return (15.0-difference)/15.0;
+	}
+	
 	public double compare(PixelArray a1, PixelArray a2)
 	{
-		return compare1(a1, a2);
+		return compare3(a1, a2);
 	}
 
 }
