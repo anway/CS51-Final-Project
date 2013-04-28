@@ -39,7 +39,7 @@ public class HistogramComparer implements PixelArrayComparer
 		a2Rgba = processImage(a2);
 		double difference = 0.0;
 		for (int i=0; i<3; i++){
-			difference += Math.pow(a1Rgba[i] - a2Rgba[i], 2);
+			difference += Math.abs(a1Rgba[i] - a2Rgba[i]);
 		}
 		return (3.0-difference)/3.0;
 	}
