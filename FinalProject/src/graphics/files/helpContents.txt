@@ -1,0 +1,5 @@
+Add images by clicking on the workbench, by dragging and dropping to it, or by choosing File > Open image.
+
+To search the file system for similar images, drag an image from the workbench to the Select Image tag or click on the tag to choose the image directly, then click Find Similar.
+
+To compare images, drag them from the workbench to the Select Image tags or click on the tags to choose images directly, then click Compare.

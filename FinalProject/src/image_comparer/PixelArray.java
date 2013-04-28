@@ -30,6 +30,7 @@ public class PixelArray
 		return pixels[y][x];
 	}
     
+	/* Get the alpha (transparency) value */
 	public static int getAlpha(int pixel)
 	{
 		return (pixel >> 24) & 0x000000FF;
