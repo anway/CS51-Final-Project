@@ -46,6 +46,8 @@ public class Tester
 		MyImage image5 = new MyImage("images/kenshin2.gif");
 		MyImage image6 = new MyImage("images/kenshin3.gif");
 		MyImage image7 = new MyImage("images/kenshin4.gif");
+		MyImage image8 = new MyImage("images/kenshin5.gif");
+		MyImage image9 = new MyImage("images/kenshin6.gif");
 		image1.setSize(32, 32);
 		image2.setSize(32, 32);
 		image3.setSize(32, 32);
@@ -53,6 +55,8 @@ public class Tester
 		image5.setSize(32, 32);
 		image6.setSize(32, 32);
 		image7.setSize(32, 32);
+		image8.setSize(32, 32);
+		image9.setSize(32, 32);
 		PixelArray cow1 = image1.toPixelArray();
 		PixelArray cow2 = image2.toPixelArray();
 		PixelArray cow3 = image3.toPixelArray();
@@ -60,6 +64,8 @@ public class Tester
 		PixelArray kenshin2 = image5.toPixelArray();
 		PixelArray kenshin3 = image6.toPixelArray();
 		PixelArray kenshin4 = image7.toPixelArray();
+		PixelArray kenshin5 = image8.toPixelArray();
+		PixelArray kenshin6 = image9.toPixelArray();
 		
 		System.out.println("SAME 32x32 IMAGE");
 		System.out.printf("\tKeypoint matching: %f%n",
@@ -143,6 +149,26 @@ public class Tester
 			doComparison(s, kenshin1, kenshin4));
 		System.out.printf("\tPerceptual hash: %f%n",
 			doComparison(pH, kenshin1, kenshin4));
+		
+		System.out.println("HUE AND SATURATION CHANGED, 32x32 IMAGE");
+		System.out.printf("\tKeypoint matching: %f%n",
+				doComparison(k, kenshin1, kenshin5));
+			System.out.printf("\tHistogram comparison: %f%n",
+				doComparison(h, kenshin1, kenshin5));
+			System.out.printf("\tSet resemblance: %f%n",
+				doComparison(s, kenshin1, kenshin5));
+			System.out.printf("\tPerceptual hash: %f%n",
+				doComparison(pH, kenshin1, kenshin5));
+			
+		System.out.println("BRIGHTNESS AND CONTRAST CHANGED, 32x32 IMAGE");
+		System.out.printf("\tKeypoint matching: %f%n",
+				doComparison(k, kenshin1, kenshin6));
+			System.out.printf("\tHistogram comparison: %f%n",
+				doComparison(h, kenshin1, kenshin6));
+			System.out.printf("\tSet resemblance: %f%n",
+				doComparison(s, kenshin1, kenshin6));
+			System.out.printf("\tPerceptual hash: %f%n",
+				doComparison(pH, kenshin1, kenshin6));
 	}
 	
 	private static void printInfo(MyImage im, PixelArray p)

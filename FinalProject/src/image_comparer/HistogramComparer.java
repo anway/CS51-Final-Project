@@ -73,7 +73,7 @@ public class HistogramComparer implements PixelArrayComparer
 		}
 		return (rgba[0]+rgba[1]+rgba[2])/3.0;
 	}
-	
+	/*
 	public double compare2(PixelArray a1, PixelArray a2)
 	{
 		double a1Rgba = processImage2(a1);
@@ -146,7 +146,7 @@ public class HistogramComparer implements PixelArrayComparer
 			difference += Math.abs(a1Rgba[i] - a2Rgba[i]);
 		}
 		return (double)(15.0-difference)/15.0;
-	}
+	}*/
 	
 	public double compare(PixelArray a1, PixelArray a2)
 	{

@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -32,6 +33,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
@@ -45,7 +47,7 @@ public class UIDriver extends JFrame
 {
 	private static final long serialVersionUID = 1L;
 	private static final Dimension SCREEN_SIZE =
-			Toolkit.getDefaultToolkit().getScreenSize();
+		Toolkit.getDefaultToolkit().getScreenSize();
 	private static final int FIND_SIMILAR = 0;
 	private static final int COMPARE_FIRST = 1;
 	private static final int COMPARE_SECOND = 2;
@@ -54,6 +56,7 @@ public class UIDriver extends JFrame
 	private final JTextArea t2 = createTextArea();
 
 	private JFileChooser c;
+	private JLabel lSimilar, lCompare1, lCompare2;
 	private File fSimilar = null;
 	private File fCompare1 = null, fCompare2 = null;
 	private String helpContents = null;
@@ -164,7 +167,19 @@ public class UIDriver extends JFrame
 
 	private JPanel createWorkbench()
 	{
-		JPanel p = new JPanel();
+		JPanel p = new JPanel()
+		{
+			private static final long serialVersionUID = 1L;
+
+			public void paintComponent(Graphics g)
+			{
+				super.paintComponent(g);
+				g.setColor(Color.GRAY);
+				g.setFont(new Font(g.getFont().getName(), Font.ITALIC, 50));
+				g.drawString("Add images to workbench", 20, 50);
+			}
+		};
+		
 		p.setMinimumSize(new Dimension(0,0));
 		p.setLayout(new GridLayout(5,5));
 		labels = createImageLabels(5,5);
@@ -223,7 +238,8 @@ public class UIDriver extends JFrame
 		JPanel controls = new JPanel();
 		controls.setLayout(new BorderLayout());
 		controls.add(b, BorderLayout.NORTH);
-		controls.add(createSelectionLabel(FIND_SIMILAR), BorderLayout.SOUTH);
+		controls.add(lSimilar = createSelectionLabel(FIND_SIMILAR),
+			BorderLayout.SOUTH);
 		p.add(controls, BorderLayout.NORTH);
 
 		p.add(t1, BorderLayout.CENTER);
@@ -260,8 +276,10 @@ public class UIDriver extends JFrame
 		JPanel controls = new JPanel();
 		controls.setLayout(new BorderLayout());
 		controls.add(b, BorderLayout.NORTH);
-		controls.add(createSelectionLabel(COMPARE_FIRST), BorderLayout.CENTER);
-		controls.add(createSelectionLabel(COMPARE_SECOND), BorderLayout.SOUTH);
+		controls.add(lCompare1 = createSelectionLabel(COMPARE_FIRST),
+			BorderLayout.CENTER);
+		controls.add(lCompare2 = createSelectionLabel(COMPARE_SECOND),
+			BorderLayout.SOUTH);
 		p.add(controls, BorderLayout.NORTH);
 
 		p.add(t2, BorderLayout.CENTER);
@@ -292,10 +310,23 @@ public class UIDriver extends JFrame
 				PHashComparer pH = new PHashComparer();
 				SetComparer s = new SetComparer();
 
-				t2.setText("\nHistogram comparison: " + h.compare(p1,p2) +
-						"\n\nKeypoint matching: " + k.compare(p1,p2) +
-						"\n\nPerceptual hash: " + pH.compare(p1,p2) +
-						"\n\nSet resemblance: " + s.compare(p1,p2));
+				double hScore = h.compare(p1,p2);
+				double kScore = k.compare(p1,p2);
+				double pHScore = pH.compare(p1,p2);
+				double sScore = s.compare(p1,p2);
+				
+				t2.setText("\nHistogram comparison: " + hScore +
+					"\n\nKeypoint matching: " + kScore +
+					"\n\nPerceptual hash: " + pHScore +
+					"\n\nSet resemblance: " + sScore);
+				
+				double score;
+				if (sScore > 0.9)
+					score = sScore;
+				else
+					score = (hScore + kScore + pHScore)/3;
+				
+				t2.append("\n\n**Beta**\nOverall similarity: " + score);
 			}
 
 		});
@@ -326,6 +357,8 @@ public class UIDriver extends JFrame
 						fCompare1 = f;
 					else
 						fCompare2 = f;
+					
+					l.setToolTipText(getToolTipText(f));
 				}
 			}
 
@@ -339,12 +372,41 @@ public class UIDriver extends JFrame
 				l.setBackground(Color.BLACK);
 			}
 		});
+		
 		return l;
 	}
 
+	private String getToolTipText(File f)
+	{
+		Image im;
+		try
+		{
+			im = ImageIO.read(f);
+		} catch(Exception ex)
+		{
+			return "";
+		}
+		int w, h;
+		if (im.getWidth(null) > im.getHeight(null))
+		{
+			w = 50;
+			h = (int)((double) w / im.getWidth(null) *
+				im.getHeight(null));
+		}
+		else
+		{
+			h = 50;
+			w = (int)((double) h / im.getHeight(null) *
+				im.getWidth(null));
+		}
+		return "<html><img src=\"file:" + f.getPath() + "\" width=" + w +
+			" height=" + h + " </img></html>";
+	}
+	
 	private JFileChooser createImageChooser()
 	{
 		JFileChooser c = new JFileChooser();
+		c.setDragEnabled(true);
 		c.setDialogTitle("Open image");
 		c.setAcceptAllFileFilterUsed(false);
 		c.setFileFilter(new FileFilter()
@@ -443,6 +505,7 @@ public class UIDriver extends JFrame
 	private JLabel createImageLabel()
 	{
 		final JLabel label = new JLabel();
+		final JPopupMenu menu = createPopupMenu(label);
 		label.addMouseListener(new MouseAdapter()
 		{
 			public void mouseClicked(MouseEvent e)
@@ -450,8 +513,23 @@ public class UIDriver extends JFrame
 				if (e.getButton() == MouseEvent.BUTTON1 &&
 						label.getIcon() == null)
 					if (c.showOpenDialog(UIDriver.this) ==
-					JFileChooser.APPROVE_OPTION)
+							JFileChooser.APPROVE_OPTION)
 						setIcon(label, c.getSelectedFile(), false);
+			}
+			public void mousePressed(MouseEvent e)
+			{
+				maybeShowPopup(e);
+			}
+
+			public void mouseReleased(MouseEvent e)
+			{
+				maybeShowPopup(e);
+			}
+
+			private void maybeShowPopup(MouseEvent e)
+			{
+				if (e.isPopupTrigger() && label.getIcon() != null)
+					menu.show(e.getComponent(), e.getX(), e.getY());
 			}
 		});
 		return label;
@@ -465,52 +543,121 @@ public class UIDriver extends JFrame
 					"Error",
 					JOptionPane.WARNING_MESSAGE);
 		else
+		{
+			ImageIcon imOriginal;
 			try
 			{
-				ImageIcon imOriginal = new ImageIcon(
-					ImageIO.read(f));
-				int origW = imOriginal.getIconWidth();
-				int origH = imOriginal.getIconHeight();
-				
-				int buffer = Math.min(8, Math.min(
-						label.getWidth(),
-						label.getHeight()));
-				int width = label.getWidth() - buffer/2;
-				int height = label.getHeight() - buffer/2;
-				
-				double ratioW = (double) origW / width;
-				double ratioH = (double) origH / height;
-				
-				int imW, imH;
-				if (ratioW > ratioH)
-				{
-					imW = width;
-					imH = (int) ((double)width/origW*origH);
-				}
-				else
-				{
-					imH = height;
-					imW = (int)((double)height/origH*origW);
-				}
-				
-				ImageIcon im = new ImageIcon(
-					imOriginal.getImage().getScaledInstance(
-					imW, imH, Image.SCALE_SMOOTH));
-				label.setIcon(im);
-				label.setHorizontalAlignment(JLabel.CENTER);
-				label.setVerticalAlignment(JLabel.CENTER);
-				
-				if (!modifying)
-				{
-					label.setName(f.getPath());
-					label.setToolTipText(f.getName());
-				}
+				imOriginal = new ImageIcon(ImageIO.read(f));
 			} catch(Exception ex)
 			{
 				JOptionPane.showMessageDialog(UIDriver.this,
-					"Cannot open image", "Error",
-					JOptionPane.WARNING_MESSAGE);
+					"Cannot open image", "Error", JOptionPane.WARNING_MESSAGE);
+				return;
 			};
+			
+			int origW = imOriginal.getIconWidth();
+			int origH = imOriginal.getIconHeight();
+			
+			int buffer = Math.min(8, Math.min(label.getWidth(),
+				label.getHeight()));
+			int width = label.getWidth() - buffer/2;
+			int height = label.getHeight() - buffer/2;
+			
+			double ratioW = (double) origW / width;
+			double ratioH = (double) origH / height;
+			
+			int imW, imH;
+			if (ratioW > ratioH)
+			{
+				imW = width;
+				imH = (int) ((double)width/origW*origH);
+			}
+			else
+			{
+				imH = height;
+				imW = (int)((double)height/origH*origW);
+			}
+			
+			ImageIcon im = new ImageIcon(
+				imOriginal.getImage().getScaledInstance(
+				imW, imH, Image.SCALE_SMOOTH));
+			label.setIcon(im);
+			label.setHorizontalAlignment(JLabel.CENTER);
+			label.setVerticalAlignment(JLabel.CENTER);
+			
+			if (!modifying)
+			{
+				label.setName(f.getPath());
+				label.setToolTipText(f.getName());
+			}
+		}
+	}
+	
+	private JPopupMenu createPopupMenu(final JLabel label)
+	{
+		final JPopupMenu menu = new JPopupMenu();
+		
+		JMenuItem item = new JMenuItem("Remove image");
+		item.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				label.setName(null);
+				label.setIcon(null);
+				label.setToolTipText(null);
+			}
+		});
+		menu.add(item);
+		
+		item = new JMenuItem("Change image");
+		item.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				if (c.showOpenDialog(UIDriver.this) ==
+						JFileChooser.APPROVE_OPTION)
+					setIcon(label, c.getSelectedFile(), false);
+			}
+		});
+		menu.add(item);
+		
+		item = new JMenuItem("Send to <Find Similar>");
+		item.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				fSimilar = new File(label.getName());
+				lSimilar.setText(fSimilar.getName());
+				lSimilar.setToolTipText(getToolTipText(fSimilar));
+			}
+		});
+		menu.add(item);
+		
+		item = new JMenuItem("Send to <Compare> Image 1");
+		item.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				fCompare1 = new File(label.getName());
+				lCompare1.setText(fCompare1.getName());
+				lCompare1.setToolTipText(getToolTipText(fCompare1));
+			}
+		});
+		menu.add(item);
+		
+		item = new JMenuItem("Send to <Compare> Image 2");
+		item.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				fCompare2 = new File(label.getName());
+				lCompare2.setText(fCompare2.getName());
+				lCompare2.setToolTipText(getToolTipText(fCompare2));
+			}
+		});
+		menu.add(item);
+		
+		return menu;
 	}
 	
 	public static void main(String[] args)

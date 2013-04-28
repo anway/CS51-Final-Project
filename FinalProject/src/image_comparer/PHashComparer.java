@@ -12,10 +12,7 @@ public class PHashComparer implements PixelArrayComparer
 		
 	}
 	
-	//TODO
-	@SuppressWarnings("unused")
-    
-    // this is supposed to be called on pixel arrays already set to be small
+    /* Compares pixel arrays that are already set to be small */
 	public double compare(PixelArray a1, PixelArray a2)
 	{
 		int w = a1.getWidth();
@@ -55,5 +52,4 @@ public class PHashComparer implements PixelArrayComparer
         }
             return (((double) matches)/((double) dimension));
 	}
-
 }
