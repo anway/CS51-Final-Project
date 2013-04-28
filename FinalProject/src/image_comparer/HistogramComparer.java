@@ -128,7 +128,7 @@ public class HistogramComparer implements PixelArrayComparer
 		}
 		for (int i=0; i<15; i++)
 		{
-			rgba[i]=(double)rgba[i]/(height*width/15.0);
+			rgba[i]=(double)rgba[i];
 		}
 		return rgba;
 	}
@@ -143,7 +143,7 @@ public class HistogramComparer implements PixelArrayComparer
 		for (int i=0; i<15; i++){
 			difference += Math.abs(a1Rgba[i] - a2Rgba[i]);
 		}
-		return (15.0-difference)/15.0;
+		return (double)(height*width-difference)/(height*width);
 	}
 	
 	public double compare(PixelArray a1, PixelArray a2)
