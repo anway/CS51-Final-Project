@@ -96,7 +96,7 @@ public class HistogramComparer implements PixelArrayComparer
 					rgba[0]++;
 				if (currRed>50 && currRed<102)
 					rgba[1]++;
-				if (currRed>101 && curRed<153)
+				if (currRed>101 && currRed<153)
 					rgba[2]++;
 				if (currRed>152 && currRed<204)
 					rgba[3]++;
@@ -107,7 +107,7 @@ public class HistogramComparer implements PixelArrayComparer
 					rgba[5]++;
 				if (currGreen>50 && currGreen<102)
 					rgba[6]++;
-				if (currGreen>101 && curGreen<153)
+				if (currGreen>101 && currGreen<153)
 					rgba[7]++;
 				if (currGreen>152 && currGreen<204)
 					rgba[8]++;
@@ -118,7 +118,7 @@ public class HistogramComparer implements PixelArrayComparer
 					rgba[10]++;
 				if (currBlue>50 && currBlue<102)
 					rgba[11]++;
-				if (currBlue>101 && curBlue<153)
+				if (currBlue>101 && currBlue<153)
 					rgba[12]++;
 				if (currBlue>152 && currBlue<204)
 					rgba[13]++;
