@@ -43,7 +43,7 @@ public class HistogramComparer implements PixelArrayComparer
 		return (3.0-difference)/3.0;
 	}
 	
-	public double[] processImage2(PixelArray a)
+	public double processImage2(PixelArray a)
 	{
 		// find average difference between current pixel and neighbors
 		// for each pixel in array. then construct color histogram
@@ -71,25 +71,20 @@ public class HistogramComparer implements PixelArrayComparer
 				rgba[2]/=(double)numNeigh;
 			}
 		}
-		return rgba;
+		return (rgba[0]+rgba[1]+rgba[2])/3.0;
 	}
 	
 	public double compare2(PixelArray a1, PixelArray a2)
 	{
-		double[] a1Rgba = new double[3];
-		double[] a2Rgba = new double[3];
-		a1Rgba = processImage2(a1);
-		a2Rgba = processImage2(a2);
-		double difference = 0.0;
-		for (int i=0; i<3; i++){
-			difference += Math.abs(a1Rgba[i] - a2Rgba[i]);
-		}
+		double a1Rgba = processImage2(a1);
+		double a2Rgba = processImage2(a2);
+		double difference = Math.abs(a1Rgba - a2Rgba);
 		return (3.0-difference)/3.0;
 	}
 	
 	public double compare(PixelArray a1, PixelArray a2)
 	{
-		return compare1(a1, a2);
+		return compare2(a1, a2);
 	}
 
 }
