@@ -150,7 +150,7 @@ public class HistogramComparer implements PixelArrayComparer
 	
 	public double compare(PixelArray a1, PixelArray a2)
 	{
-		return compare3(a1, a2);
+		return compare1(a1, a2);
 	}
 
 }
