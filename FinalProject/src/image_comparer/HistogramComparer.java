@@ -79,7 +79,7 @@ public class HistogramComparer implements PixelArrayComparer
 		double a1Rgba = processImage2(a1);
 		double a2Rgba = processImage2(a2);
 		double difference = Math.abs(a1Rgba - a2Rgba);
-		return (3.0-difference)/3.0;
+		return (1.0-difference)/1.0;
 	}
 	
 	public double compare(PixelArray a1, PixelArray a2)
