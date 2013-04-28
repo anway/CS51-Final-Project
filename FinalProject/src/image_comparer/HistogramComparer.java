@@ -10,9 +10,9 @@ public class HistogramComparer implements PixelArrayComparer
 		
 	}
 	
-	public int[] processImage(PixelArray a)
+	public double[] processImage(PixelArray a)
 	{
-		int[] rgba = new int[]{0,0,0,0};
+		double[] rgba = new double[]{0.0, 0.0, 0.0, 0.0};
 		int width = a.getWidth();
 		int height = a.getHeight();
 		int currPixel = 0;
@@ -25,10 +25,10 @@ public class HistogramComparer implements PixelArrayComparer
 				rgba[3] += PixelArray.getAlpha(currPixel);
 			}
 		}
-		rgba[0] /= (height*width*255);
-		rgba[1] /= (height*width*255);
-		rgba[2] /= (height*width*255);
-		rgba[3] /= (height*width*255);
+		rgba[0] = (double)rgba[0]/(height*width*255.0);
+		rgba[1] = (double)rgba[1]/(height*width*255.0);
+		rgba[2] = (double)rgba[2]/(height*width*255.0);
+		rgba[3] = (double)rgba[3]/(height*width*255.0);
 		System.out.println("Red: " + rgba[0] + "Green: " + rgba[1] + "Blue: " + rgba[2] + "Alpha: " + rgba[3]);
 		return rgba;
 	}
@@ -36,11 +36,11 @@ public class HistogramComparer implements PixelArrayComparer
 	//TODO
 	public double compare(PixelArray a1, PixelArray a2)
 	{
-		int[] a1Rgba = new int[4];
-		int[] a2Rgba = new int[4];
+		double[] a1Rgba = new double[4];
+		double[] a2Rgba = new double[4];
 		a1Rgba = processImage(a1);
 		a2Rgba = processImage(a2);
-		int difference = 0;
+		double difference = 0;
 		for (int i=0; i<4; i++){
 			difference += Math.abs(a1Rgba[i] - a2Rgba[i]);
 		}
