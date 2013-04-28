@@ -11,7 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 
-//TODO figure out why some image previews are not showing
+/* Displays a thumbnail view of the selected image in the file chooser */
 public class ImagePreview extends JComponent implements PropertyChangeListener
 {
 	private static final long serialVersionUID = 1L;

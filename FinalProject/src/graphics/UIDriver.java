@@ -43,6 +43,8 @@ import javax.swing.filechooser.FileFilter;
 
 import org.pushingpixels.substance.api.skin.SubstanceMarinerLookAndFeel;
 
+/* A graphical interface that lets a user select images from the native
+ * file system, compare two images, and search for similar images */
 public class UIDriver extends JFrame
 {
 	private static final long serialVersionUID = 1L;
@@ -68,11 +70,13 @@ public class UIDriver extends JFrame
 		setExtendedState(getExtendedState()|JFrame.MAXIMIZED_BOTH );
 		setVisible(true);
 		setDefaultCloseOperation(UIDriver.EXIT_ON_CLOSE);
-		setTitle("Image Organizer");
+		setTitle("Image Finder");
 
 		init();
 	}
 
+	/* Our gui has a menu bar, a workbench, a Find Similar images panel, and a
+	 * Compare images panel */
 	public void init()
 	{
 		try
@@ -87,9 +91,13 @@ public class UIDriver extends JFrame
 		c = createImageChooser();
 		setJMenuBar(createMenuBar());
 		setContentPane(createSplitPane());
+		getContentPane().requestFocus();
+		
+		// Tool tips display image names upon mouse over
 		ToolTipManager.sharedInstance().setInitialDelay(50);
 	}
 
+	// There is a File menu (for opening images) and a Help menu
 	private JMenuBar createMenuBar()
 	{
 		JMenuBar menuBar;
@@ -106,6 +114,8 @@ public class UIDriver extends JFrame
 		menuItem = new JMenuItem("Open image");
 		menuItem.getAccessibleContext().setAccessibleDescription(
 			"Add an image to the workbench");
+		
+		// Uses a JFileChooser to add an image to the workbench
 		menuItem.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -153,6 +163,8 @@ public class UIDriver extends JFrame
 		return menuBar;
 	}
 
+	/* The left pane is the workbench, the right pane is a split pane that
+	 * contains the Find Similar and Compare panels */
 	private JSplitPane createSplitPane()
 	{
 		JSplitPane p = new JSplitPane();
@@ -165,12 +177,14 @@ public class UIDriver extends JFrame
 		return p;
 	}
 
+	// Creates the workbench
 	private JPanel createWorkbench()
 	{
 		JPanel p = new JPanel()
 		{
 			private static final long serialVersionUID = 1L;
 
+			// Writes faint instructions across the top of the workbench
 			public void paintComponent(Graphics g)
 			{
 				super.paintComponent(g);
@@ -180,15 +194,16 @@ public class UIDriver extends JFrame
 			}
 		};
 		
+		// Adds 25 labels that will be used to display images
 		p.setMinimumSize(new Dimension(0,0));
 		p.setLayout(new GridLayout(5,5));
 		labels = createImageLabels(5,5);
 		for (JLabel label : labels)
 			p.add(label);
 		
+		// If workbench is resized, recompute image sizes
 		p.addComponentListener(new ComponentAdapter()
 		{
-
 			public void componentResized(ComponentEvent arg0)
 			{
 				for (JLabel label : labels)
@@ -207,6 +222,7 @@ public class UIDriver extends JFrame
 		return p;
 	}
 
+	// Creates the workbench labels that will hold images
 	private JLabel[] createImageLabels(int rows, int cols)
 	{
 		JLabel[] labels = new JLabel[rows*cols];
@@ -215,6 +231,7 @@ public class UIDriver extends JFrame
 		return labels;
 	}
 
+	// Adds the Find Similar and Compare panels to a split pane on the right
 	private JSplitPane createComparisonPane()
 	{
 		JSplitPane p = new JSplitPane();
@@ -225,6 +242,7 @@ public class UIDriver extends JFrame
 		return p;
 	}
 
+	// Creates the Find Similar panel
 	private JPanel createSimilarImagesFinder()
 	{
 		JPanel p = new JPanel();
@@ -235,6 +253,7 @@ public class UIDriver extends JFrame
 		b.setFont(b.getFont().deriveFont(Font.BOLD));
 		b.setPreferredSize(new Dimension(200, 40));
 
+		// Controls consist of a Find Similar button and a Select Image label
 		JPanel controls = new JPanel();
 		controls.setLayout(new BorderLayout());
 		controls.add(b, BorderLayout.NORTH);
@@ -244,6 +263,7 @@ public class UIDriver extends JFrame
 
 		p.add(t1, BorderLayout.CENTER);
 
+		// TODO Finds similar images
 		b.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -263,6 +283,7 @@ public class UIDriver extends JFrame
 		return p;
 	}
 
+	// Creates the Compare panel
 	private JPanel createPairwiseComparer()
 	{
 		JPanel p = new JPanel();
@@ -273,6 +294,7 @@ public class UIDriver extends JFrame
 		b.setFont(b.getFont().deriveFont(Font.BOLD));
 		b.setPreferredSize(new Dimension(200, 40));
 
+		// Controls consist of a Compare button and two Select Image labels
 		JPanel controls = new JPanel();
 		controls.setLayout(new BorderLayout());
 		controls.add(b, BorderLayout.NORTH);
@@ -284,6 +306,7 @@ public class UIDriver extends JFrame
 
 		p.add(t2, BorderLayout.CENTER);
 
+		// Compares two user-selected images
 		b.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -304,7 +327,7 @@ public class UIDriver extends JFrame
 				PixelArray p1 = im1.toPixelArray();
 				PixelArray p2 = im2.toPixelArray();
 
-				//TODO what to display?
+				//TODO Computes the similarity
 				HistogramComparer h = new HistogramComparer();
 				KeypointComparer k = new KeypointComparer();
 				PHashComparer pH = new PHashComparer();
@@ -334,6 +357,7 @@ public class UIDriver extends JFrame
 		return p;
 	}
 
+	// Creates a Select Image label
 	private JLabel createSelectionLabel(final int mode)
 	{
 		final JLabel l = new JLabel("Select image");
@@ -342,6 +366,8 @@ public class UIDriver extends JFrame
 		l.setBackground(Color.BLACK);
 		l.setFont(l.getFont().deriveFont(Font.BOLD));
 		l.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		// Mouse click brings up a file chooser
 		l.addMouseListener(new MouseAdapter()
 		{
 			public void mouseClicked(MouseEvent e)
@@ -376,6 +402,7 @@ public class UIDriver extends JFrame
 		return l;
 	}
 
+	// Sets the tool tip text to the image in the file parameter
 	private String getToolTipText(File f)
 	{
 		Image im;
@@ -386,6 +413,8 @@ public class UIDriver extends JFrame
 		{
 			return "";
 		}
+		
+		// Computes a good thumbnail size
 		int w, h;
 		if (im.getWidth(null) > im.getHeight(null))
 		{
@@ -403,6 +432,7 @@ public class UIDriver extends JFrame
 			" height=" + h + " </img></html>";
 	}
 	
+	// Creates a file chooser
 	private JFileChooser createImageChooser()
 	{
 		JFileChooser c = new JFileChooser();
@@ -436,6 +466,7 @@ public class UIDriver extends JFrame
 		return c;
 	}
 
+	// Creates a text area
 	private JTextArea createTextArea()
 	{
 		JTextArea t = new JTextArea();
@@ -445,6 +476,7 @@ public class UIDriver extends JFrame
 		return t;
 	}
 
+	// Neatly prints the specified string in a given font and width
 	private String neatlyPrint(String s, Font f, int w)
 	{
 		FontMetrics metrics = getFontMetrics(f);
@@ -456,6 +488,7 @@ public class UIDriver extends JFrame
 			result.substring(0, result.length()-2);
 	}
 
+	// Neatly prints a string, assuming it has no paragraph breaks
 	private String neatlyPrintOneLine(String s, FontMetrics metrics, int w)
 	{
 		String result = "";
@@ -482,6 +515,7 @@ public class UIDriver extends JFrame
 		return result;
 	}
 
+	// Gets the contents of the menu option Help > About
 	private String loadHelpContents()
 	{
 		Scanner in = new Scanner(UIDriver.class.getResourceAsStream(
@@ -494,6 +528,7 @@ public class UIDriver extends JFrame
 			getFont(), 150);
 	}
 
+	// Checks whether an image is in the workbench
 	private boolean openedImagesContains(String filename)
 	{
 		for (JLabel label : labels)
@@ -502,10 +537,14 @@ public class UIDriver extends JFrame
 		return false;
 	}
 	
+	// Creates a workbench label for displaying an image
 	private JLabel createImageLabel()
 	{
 		final JLabel label = new JLabel();
 		final JPopupMenu menu = createPopupMenu(label);
+		
+		/* Clicking on an empty label brings up a file chooser, and double-
+		 * clicking on a label with an image brings up a menu in-place*/
 		label.addMouseListener(new MouseAdapter()
 		{
 			public void mouseClicked(MouseEvent e)
@@ -516,6 +555,7 @@ public class UIDriver extends JFrame
 							JFileChooser.APPROVE_OPTION)
 						setIcon(label, c.getSelectedFile(), false);
 			}
+			
 			public void mousePressed(MouseEvent e)
 			{
 				maybeShowPopup(e);
@@ -535,6 +575,9 @@ public class UIDriver extends JFrame
 		return label;
 	}
 	
+	/* Sets the image on the specified label. The modifying flag indicates
+	 * whether we are loading a new image into the workbench or resizing an
+	 * existing one */
 	private void setIcon(JLabel label, File f, boolean modifying)
 	{
 		if (!modifying && openedImagesContains(f.getPath()))
@@ -555,6 +598,7 @@ public class UIDriver extends JFrame
 				return;
 			};
 			
+			// Fits the image to the label size
 			int origW = imOriginal.getIconWidth();
 			int origH = imOriginal.getIconHeight();
 			
@@ -593,6 +637,7 @@ public class UIDriver extends JFrame
 		}
 	}
 	
+	// Creates the pop-up menu associated with each workbench label
 	private JPopupMenu createPopupMenu(final JLabel label)
 	{
 		final JPopupMenu menu = new JPopupMenu();
@@ -664,6 +709,7 @@ public class UIDriver extends JFrame
 	{
 		try
 		{
+			// Uses a look and feel from the Substance library
 			UIManager.setLookAndFeel(new SubstanceMarinerLookAndFeel());
 		} catch (Exception e) {}
 
