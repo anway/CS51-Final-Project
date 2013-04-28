@@ -84,7 +84,7 @@ public class HistogramComparer implements PixelArrayComparer
 	
 	public double[] processImage3(PixelArray a)
 	{
-		double[] rgba = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0, 0.0, 0.0, 0.0, 0.0};
+		double[] rgba = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 		int width = a.getWidth();
 		int height = a.getHeight();
 		int currPixel = 0, currRed=0, currGreen=0, currBlue=0;
@@ -126,9 +126,10 @@ public class HistogramComparer implements PixelArrayComparer
 					rgba[14]++;
 			}
 		}
-		rgba[0] = (double)rgba[0]/(height*width*51.0);
-		rgba[1] = (double)rgba[1]/(height*width*51.0);
-		rgba[2] = (double)rgba[2]/(height*width*51.0);
+		for (int i=0; i<15; i++)
+		{
+			rgba[i]=(double)rgba[i]/(height*width*51.0);
+		}
 		return rgba;
 	}
 	
