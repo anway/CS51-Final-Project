@@ -137,8 +137,8 @@ public class HistogramComparer implements PixelArrayComparer
 	{
 		double[] a1Rgba = new double[15];
 		double[] a2Rgba = new double[15];
-		a1Rgba = processImage1(a1);
-		a2Rgba = processImage1(a2);
+		a1Rgba = processImage3(a1);
+		a2Rgba = processImage3(a2);
 		double difference = 0.0;
 		for (int i=0; i<15; i++){
 			difference += Math.abs(a1Rgba[i] - a2Rgba[i]);
