@@ -27,7 +27,6 @@ public class HistogramComparer implements PixelArrayComparer
 		rgba[0] = (double)rgba[0]/(height*width*255.0);
 		rgba[1] = (double)rgba[1]/(height*width*255.0);
 		rgba[2] = (double)rgba[2]/(height*width*255.0);
-		System.out.println("Red: " + rgba[0] + "Green: " + rgba[1] + "Blue: " + rgba[2]);
 		return rgba;
 	}
 	
@@ -40,7 +39,7 @@ public class HistogramComparer implements PixelArrayComparer
 		a2Rgba = processImage(a2);
 		double difference = 0.0;
 		for (int i=0; i<3; i++){
-			difference += Math.abs(a1Rgba[i] - a2Rgba[i]);
+			difference += Math.pow(a1Rgba[i] - a2Rgba[i], 2);
 		}
 		return (3.0-difference)/3.0;
 	}
