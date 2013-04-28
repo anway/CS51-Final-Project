@@ -128,7 +128,7 @@ public class HistogramComparer implements PixelArrayComparer
 		}
 		for (int i=0; i<15; i++)
 		{
-			rgba[i]=(double)rgba[i]/(height*width*51.0);
+			rgba[i]=(double)rgba[i]/(height*width/15.0);
 		}
 		return rgba;
 	}
