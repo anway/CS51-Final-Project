@@ -92,6 +92,8 @@ public class PixelArray
 			}
 		return new PixelArray(roundedArray);
 	}
+    
+
 	
 	// Helper method to get the distance between two pixels
 	public static double getDistance(int p1, int p2)
