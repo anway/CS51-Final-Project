@@ -29,6 +29,7 @@ public class HistogramComparer implements PixelArrayComparer
 		rgba[1] /= (height*width*255);
 		rgba[2] /= (height*width*255);
 		rgba[3] /= (height*width*255);
+		System.out.println("Red: " + rgba[0] + "Green: " + rgba[1] + "Blue: " + rgba[2] + "Alpha: " + rgba[3]);
 		return rgba;
 	}
 	
