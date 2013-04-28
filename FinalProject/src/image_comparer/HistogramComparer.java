@@ -53,9 +53,9 @@ public class HistogramComparer implements PixelArrayComparer
 		int currPixel = 0, neighbor = 0, numNeigh=0;
 		for (int i=0; i<width; i++){
 			for (int j=0; j<height; j++){
-				for (int k=-1; k<=1; k++){
-					for (int m=-1; m<=1; m++){
-						if ((i+k>0 && i+k<width) && (j+m>0 && j+m<height))
+				for (int k=-2; k<=2; k++){
+					for (int m=-2; m<=2; m++){
+						if ((i+k>0 && i+k<width) && (j+m>0 && j+m<height) && (m!=0 && k!=0))
 						{
 							++numNeigh;
 							neighbor = a.getPixel(i+k, j+m);
@@ -84,7 +84,7 @@ public class HistogramComparer implements PixelArrayComparer
 	
 	public double compare(PixelArray a1, PixelArray a2)
 	{
-		return compare1(a1, a2);
+		return compare2(a1, a2);
 	}
 
 }
