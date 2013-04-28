@@ -135,6 +135,8 @@ public class HistogramComparer implements PixelArrayComparer
 	
 	public double compare3(PixelArray a1, PixelArray a2)
 	{
+		int width = a1.getWidth();
+		int height = a1.getHeight();
 		double[] a1Rgba = new double[15];
 		double[] a2Rgba = new double[15];
 		a1Rgba = processImage3(a1);
