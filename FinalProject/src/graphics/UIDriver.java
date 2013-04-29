@@ -6,7 +6,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -20,7 +19,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.Arrays;
-import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -50,6 +48,7 @@ public class UIDriver extends JFrame
 	private static final long serialVersionUID = 1L;
 	private static final Dimension SCREEN_SIZE =
 		Toolkit.getDefaultToolkit().getScreenSize();
+	private static final Dimension ZERO = new Dimension(0,0);
 	private static final int FIND_SIMILAR = 0;
 	private static final int COMPARE_FIRST = 1;
 	private static final int COMPARE_SECOND = 2;
@@ -61,7 +60,6 @@ public class UIDriver extends JFrame
 	private JLabel lSimilar, lCompare1, lCompare2;
 	private File fSimilar = null;
 	private File fCompare1 = null, fCompare2 = null;
-	private String helpContents = null;
 	private JLabel[] labels;
 
 	public UIDriver()
@@ -70,7 +68,7 @@ public class UIDriver extends JFrame
 		setExtendedState(getExtendedState()|JFrame.MAXIMIZED_BOTH );
 		setVisible(true);
 		setDefaultCloseOperation(UIDriver.EXIT_ON_CLOSE);
-		setTitle("Image Finder");
+		setTitle("Image Cow");
 
 		init();
 	}
@@ -111,7 +109,7 @@ public class UIDriver extends JFrame
 		menu.getAccessibleContext().setAccessibleDescription("Main menu");
 		menuBar.add(menu);
 
-		menuItem = new JMenuItem("Open image");
+		menuItem = new JMenuItem("Open Image...");
 		menuItem.getAccessibleContext().setAccessibleDescription(
 			"Add an image to the workbench");
 		
@@ -146,16 +144,27 @@ public class UIDriver extends JFrame
 		menu.getAccessibleContext().setAccessibleDescription("Help menu");
 		menuBar.add(menu);
 
-		menuItem = new JMenuItem("About");
-		menuItem.getAccessibleContext().setAccessibleDescription("About");
+		menuItem = new JMenuItem("Contents");
+		menuItem.getAccessibleContext().setAccessibleDescription("Contents");
 		menuItem.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				if (helpContents == null)
-					helpContents = loadHelpContents();
-				JOptionPane.showMessageDialog(UIDriver.this, helpContents,
-					"Help", JOptionPane.INFORMATION_MESSAGE);
+				JSplitPane p = new JSplitPane();
+				p.setOrientation(JSplitPane.VERTICAL_SPLIT);
+				
+				JTextArea t = createTextArea();
+				t.setPreferredSize(new Dimension(300,50));
+				t.setMinimumSize(ZERO);
+				p.setBottomComponent(t);
+				
+				HelpTree h = new HelpTree(t);
+				h.setPreferredSize(new Dimension(300,200));
+				h.setMinimumSize(ZERO);
+				p.setTopComponent(h);
+				
+				JOptionPane.showMessageDialog(UIDriver.this, p, "Help",
+					JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		menu.add(menuItem);
@@ -188,14 +197,14 @@ public class UIDriver extends JFrame
 			public void paintComponent(Graphics g)
 			{
 				super.paintComponent(g);
-				g.setColor(Color.GRAY);
+				g.setColor(new Color(200,200,200));
 				g.setFont(new Font(g.getFont().getName(), Font.ITALIC, 50));
 				g.drawString("Add images to workbench", 20, 50);
 			}
 		};
 		
 		// Adds 25 labels that will be used to display images
-		p.setMinimumSize(new Dimension(0,0));
+		p.setMinimumSize(ZERO);
 		p.setLayout(new GridLayout(5,5));
 		labels = createImageLabels(5,5);
 		for (JLabel label : labels)
@@ -235,7 +244,7 @@ public class UIDriver extends JFrame
 	private JSplitPane createComparisonPane()
 	{
 		JSplitPane p = new JSplitPane();
-		p.setMinimumSize(new Dimension(0,0));
+		p.setMinimumSize(ZERO);
 		p.setResizeWeight(0.5);
 		p.setLeftComponent(createSimilarImagesFinder());
 		p.setRightComponent(createPairwiseComparer());
@@ -246,7 +255,7 @@ public class UIDriver extends JFrame
 	private JPanel createSimilarImagesFinder()
 	{
 		JPanel p = new JPanel();
-		p.setMinimumSize(new Dimension(0,0));
+		p.setMinimumSize(ZERO);
 		p.setLayout(new BorderLayout());
 
 		JButton b = new JButton("Find Similar");
@@ -287,7 +296,7 @@ public class UIDriver extends JFrame
 	private JPanel createPairwiseComparer()
 	{
 		JPanel p = new JPanel();
-		p.setMinimumSize(new Dimension(0,0));
+		p.setMinimumSize(ZERO);
 		p.setLayout(new BorderLayout());
 
 		JButton b = new JButton("Compare");
@@ -360,7 +369,7 @@ public class UIDriver extends JFrame
 	// Creates a Select Image label
 	private JLabel createSelectionLabel(final int mode)
 	{
-		final JLabel l = new JLabel("Select image");
+		final JLabel l = new JLabel("Select Image");
 		l.setPreferredSize(new Dimension(200, 40));
 		l.setOpaque(true);
 		l.setBackground(Color.BLACK);
@@ -474,58 +483,6 @@ public class UIDriver extends JFrame
 		t.setLineWrap(true);
 		t.setWrapStyleWord(true);
 		return t;
-	}
-
-	// Neatly prints the specified string in a given font and width
-	private String neatlyPrint(String s, Font f, int w)
-	{
-		FontMetrics metrics = getFontMetrics(f);
-		String[] sArray = s.split("\n\n");
-		String result = "";
-		for (String line : sArray)
-			result += neatlyPrintOneLine(line, metrics, w) + "\n\n";
-		return result.length() == 0 ? result :
-			result.substring(0, result.length()-2);
-	}
-
-	// Neatly prints a string, assuming it has no paragraph breaks
-	private String neatlyPrintOneLine(String s, FontMetrics metrics, int w)
-	{
-		String result = "";
-		int width = 0;
-
-		String[] sArray = s.split(" ");
-		for (int i = 0; i < sArray.length; ++i)
-		{
-			String word = sArray[i].replace("\n", " ") +
-				(i < sArray.length-1 ? " " : "");
-			int wordWidth = metrics.stringWidth(word);
-			if (width + wordWidth < w)
-			{
-				result += word;
-				width += wordWidth;
-			}
-			else
-			{
-				result += "\n" + word;
-				width = 0;
-			}
-		}
-
-		return result;
-	}
-
-	// Gets the contents of the menu option Help > About
-	private String loadHelpContents()
-	{
-		Scanner in = new Scanner(UIDriver.class.getResourceAsStream(
-			"files/helpContents.txt"));
-		String contents = "";
-		while (in.hasNextLine())
-			contents += in.nextLine() + "\n";
-		in.close();
-		return neatlyPrint(contents.substring(0, contents.length()-1),
-			getFont(), 150);
 	}
 
 	// Checks whether an image is in the workbench
