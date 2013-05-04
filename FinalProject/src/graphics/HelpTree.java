@@ -1,5 +1,6 @@
 package graphics;
 
+import java.awt.Dimension;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Scanner;
@@ -23,6 +24,7 @@ public class HelpTree extends JTree
 	public HelpTree(JTextArea a)
 	{
 		super(new MyTreeNode(new NodeInfo("Overview")));
+		setPreferredSize(new Dimension(400, 400));
 		this.a = a;
 		init();
 	}
@@ -86,22 +88,23 @@ public class HelpTree extends JTree
 		{
 			if (s.equals("Overview"))
 				continue;
-			if (!s.contains("/"))
-				top.add(new MyTreeNode(new NodeInfo(s)));
-			else
+			String[] path = s.split("/");
+			DefaultMutableTreeNode currTop = top;
+			for (int i = 0; i < path.length-1; ++i)
 			{
-				String parent = s.substring(0, s.indexOf("/"));
-				int count = top.getChildCount();
-				for (int i = 0; i < count; ++i)
+				int count = currTop.getChildCount();
+				for (int j = 0; j < count; ++j)
 				{
-					MyTreeNode n = (MyTreeNode) top.getChildAt(i);
-					if (n.toString().equals(parent))
+					MyTreeNode n = (MyTreeNode) currTop.getChildAt(j);
+					if (n.toString().equals(path[i]))
 					{
-						n.add(new MyTreeNode(new NodeInfo(s)));
+						currTop = n;
 						break;
 					}
 				}
 			}
+			((DefaultMutableTreeNode) currTop).add(new MyTreeNode(
+				new NodeInfo(s)));
 		}
 	}
 	
@@ -116,7 +119,7 @@ public class HelpTree extends JTree
 		
 		public String toString()
 		{
-			return header.substring(header.indexOf("/")+1);
+			return header.substring(header.lastIndexOf("/")+1);
 		}
 	}
 	

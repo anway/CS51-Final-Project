@@ -1,17 +1,29 @@
 Overview : Image Cow is an image comparison and finding tool.
-Workbench : Open images onto the workbench for convenience.
-Workbench/Importing an image : Add an image to the workbench by either+
-(1) going to File > Open Image, or+
-(2) clicking anywhere in the workbench.
-Workbench/Exporting an image: Right-click on the image for a list of options.
-Workbench/Changing or removing an image : Right-click on the image for a list of options.
-Finder : A tool to find images similar to a single target image (coming soon!).
-Finder/Importing an image : Choose a target image by either+
-(1) clicking on the <Select Image> tag, or+
-(2) right-clicking on the image in the workbench.
-Finder/Finding similar images : Click <Find Similar> to bring up a list of similar images.
-Comparer : A tool to compare two images.
-Comparer/Importing an image : Choose one of two image to compare by either+
-(1) clicking on one of the <Select Image> tags, or+
-(2) right-clicking on an image in the workbench.
-Comparer/Comparing two images : Click <Compare> to bring up detailed comparison information on the selected images.
+Workbench : Store images on the workbench for convenience.
+Workbench/Import an image : (1) Go to File > Open Image (multiple image selection enabled) or+
+(2) click anywhere in the workbench.
+Workbench/Change an image : Right-click on the image and select Change.
+Workbench/Remove an image : (1) Remove all : Go to File > Clear Workbench.+
+(2) Remove one : Right-click on the image and select Remove.
+Workbench/Export an image : Right-click on the image and select Send to <target>.
+Finder : Find images similar to a target image.
+Finder/Import an image : (1) Import from the workbench (see Workbench/Export an image),+
+(2) go to Find Similar > Open Image, or+
+(3) click on the <Select Image>  tag.
+Finder/Specify directories to search : Go to Find Similar > Change Directories.
+Finder/Customize : Go to Find Similar > Customize Comparer to customize the search criteria.
+Finder/Customize/Choose algorithm : See Algorithms.
+Finder/Customize/Adjust match threshold : Select a percentage similarity from 0 to 100.
+Finder/Execute : (1) Navigate to Find Similar > Go!, or+
+(2) click on <Find Similar>.
+Comparer : Get detailed comparison information on two images.
+Comparer/Import an image : (1) Import from the workbench (see Workbench/Export an image),+
+(2) Go to Compare > Open Image, or+
+(3) Click on one of the <Select Image> tags.
+Comparer/Execute : (1) Navigate to Compare > Go!, or+
+(2) click on <Compare>.
+Algorithms : Understand the image comparison algorithms.
+Algorithms/Histogram comparison : Compares the total amount of red, green, and blue in each image.
+Algorithms/Keypoint matching : Checks whether key points in images match.
+Algorithms/Perceptual hash : Compares color gradients in images.
+Algorithms/Set resemblance : Shingles the images and counts the number of matches.

@@ -7,7 +7,7 @@ import java.util.Random;
 /*
  * Compares two images using a set resemblance algorithm.
  */
-public class SetComparer implements PixelArrayComparer
+public class SetComparer extends PixelArrayComparer
 {
 	public static final int SKETCH_SIZE = 100;
 	
@@ -16,10 +16,10 @@ public class SetComparer implements PixelArrayComparer
 		
 	}
 	
-	public double compare(PixelArray a1, PixelArray a2)
+	protected double compareIDs(Object o1, Object o2)
 	{
-		int[] sketch1 = getSketch(a1);
-		int[] sketch2 = getSketch(a2);
+		int[] sketch1 = (int[]) o1;
+		int[] sketch2 = (int[]) o2;
 		
 		int matches = 0;
 		for (int i = 0; i < SKETCH_SIZE; ++i)
@@ -32,7 +32,7 @@ public class SetComparer implements PixelArrayComparer
 	/*
 	 * Associates a ``sketch'' (an id) with a pixel array
 	 */
-	public static int[] getSketch(PixelArray p)
+	protected int[] getID(PixelArray p)
 	{
 		int[] sketch = new int[SKETCH_SIZE];
 		
@@ -52,7 +52,7 @@ public class SetComparer implements PixelArrayComparer
 	/*
 	 * Breaks (shingles) the image into overlapping 4x4 blocks and hashes each
 	 */
-	public static Boolean[] shingle(PixelArray p)
+	private static Boolean[] shingle(PixelArray p)
 	{
 		Boolean[] shingles = new Boolean[4096];
 		for (int i = 0; i < shingles.length; i++)

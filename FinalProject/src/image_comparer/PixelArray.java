@@ -12,6 +12,30 @@ public class PixelArray
 		this.pixels = pixels;
 	}
 	
+	/*
+	 * Generates an ID for this pixel array.
+	 * Two pixel arrays have the same ID iff all pixels match.
+	 * This method should only be called on small pixel arrays.
+	 */
+	public String toString()
+	{
+		long id = 0;
+		for (int i = 0, w = getWidth(); i < w; ++i)
+			for (int j = 0, h = getHeight(); j < h; ++j)
+			{
+				int pixel = getPixel(i, j);
+				id += pixel;
+				id += id << 10;
+				id ^= id >> 6;
+			}
+		
+		id += (id << 3);
+		id ^= (id >> 11);
+		id += (id << 15);
+		
+		return Long.toString(id);
+	}
+	
 	/* Gets the width */
 	public int getWidth()
 	{

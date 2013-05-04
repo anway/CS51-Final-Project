@@ -1,55 +1,74 @@
 package image_comparer;
-import java.util.Random;
 import java.util.*;
 
 /*
  * Matches key points in two images to compare them.  Assumes the images are
- * the same size
+ * the same size.
  */
-public class KeypointComparer implements PixelArrayComparer
+public class KeypointComparer extends PixelArrayComparer
 {
+	private Random rand;
+	private PixelArray a1, a2;
+	
 	public KeypointComparer()
 	{
-
+		rand = new Random();
 	}
 
-	public double compare(PixelArray a1, PixelArray a2)
+	/*
+	 * Overrides compare() because the comparison method needs access to the
+	 * pixel arrays.  The instance fields a1 and a2 cannot be modified before
+	 * the comparison is finished!
+	 * */
+	public synchronized double compare(PixelArray a1, PixelArray a2)
 	{
-		// We want the probability of a collision to be less than 0.5
-		int n = (int) Math.sqrt(a1.getWidth() * a1.getHeight() * 1.386);
+		this.a1 = a1;
+		this.a2 = a2;
+		return super.compare(a1, a2);
+	}
+	
+	/*
+	 * If #(interesting pixels) < 20, pixels are randomly chosen
+	 */
+	private HashSet<int[]> getRandomID(PixelArray a)
+	{
+		int width = a.getWidth(), height = a.getHeight();
+		
+		int n = (int) Math.sqrt(width * height * 1.386);
 		if (n == 0)
 			n = 1;
-
-		return completeCompare(a1, a2, n);
+		
+		HashSet<int[]> cos = new HashSet<int[]>();
+		for (int i = 0; i < n; ++i)
+			cos.add(new int[]{rand.nextInt(width), rand.nextInt(height)});
+		
+		return cos;
 	}
 
-	/*
-	 * Picks random points in two images and compares them.
-	 */
-	private double randomCompare(PixelArray a1, PixelArray a2, int n) {
-		int width = a1.getWidth();
-		int height = a1.getHeight();
-
-		int numMatched=0, currWidth, currHeight;
-		Random rand = new Random();
-		for (int i=0; i<n; ++i) {
-			currWidth = rand.nextInt(width);
-			currHeight = rand.nextInt(height);
-			if (a1.getPixel(currWidth, currHeight)==
-					a2.getPixel(currWidth, currHeight))
-				++numMatched;
+	@SuppressWarnings("unchecked")
+	protected double compareIDs(Object o1, Object o2)
+	{
+		HashSet<int[]> cos = (HashSet<int[]>) o1;
+		cos.addAll((HashSet<int[]>) o2);
+		
+		int counter = cos.size();
+		int matched = 0;
+		
+		for (int[] p : cos)
+		{
+			if (PixelArray.getDistance(a1.getPixel(p[0], p[1]),
+					a2.getPixel(p[0], p[1])) < 20.)
+				++matched;
 		}
-		return (double)numMatched/n;
+		
+		return (double) matched / (double) counter;
 	}
-
-	/*
-	 * Intelligently picks points in two images to compare.
-	 */
-	private double completeCompare(PixelArray a1, PixelArray a2, int n) {
-		int width = a1.getWidth();
-		int height = a1.getHeight();
-		ArrayList<Integer> xcos = new ArrayList<Integer>();
-		ArrayList<Integer> ycos = new ArrayList<Integer>();
+	
+	protected HashSet<int[]> getID(PixelArray a)
+	{
+		int width = a.getWidth();
+		int height = a.getHeight();
+		HashSet<int[]> cos = new HashSet<int[]>();
 		double asum;
 		double rsum;
 		double bsum;
@@ -67,7 +86,7 @@ public class KeypointComparer implements PixelArrayComparer
 				int neighbor;
 				for (int k=-1;k<2;++k) {
 					for (int l=-1;l<2;++l) {
-						neighbor = a1.getPixel(i+k, j+l);
+						neighbor = a.getPixel(i+k, j+l);
 						asum += (double)
 							PixelArray.getAlpha(neighbor);
 						rsum += (double)
@@ -79,30 +98,22 @@ public class KeypointComparer implements PixelArrayComparer
 					}
 				}
 				asum /= 9.0; rsum /= 9.0; bsum /= 9.0; gsum /= 9.0;
-				int pixel = a1.getPixel(i, j);
+				int pixel = a.getPixel(i, j);
 				diff = (Math.abs(asum-PixelArray.getAlpha(pixel))
 					+ Math.abs(rsum-PixelArray.getRed(pixel))
 					+ Math.abs(bsum-PixelArray.getBlue(pixel))
 					+ Math.abs(gsum
 						- PixelArray.getGreen(pixel)))/1024.0;
 				if (diff > 0.1) {
-					xcos.add(i);
-					ycos.add(j);
+					cos.add(new int[]{i,j});
 					++counter;
 				}
 			}
 		}
+		
+		if (counter < 20)
+			return getRandomID(a);
 
-		if (counter<20) {
-			return randomCompare(a1, a2, n);
-		}
-		int matched = 0;
-		for (int i=0; i<counter; ++i) {
-			if (PixelArray.getDistance(a1.getPixel(xcos.get(i), ycos.get(i)),
-					a2.getPixel(xcos.get(i), ycos.get(i))) < 20.)
-				++matched;
-		}
-
-		return ((double) matched) / ((double) counter);
+		return cos;
 	}
 }

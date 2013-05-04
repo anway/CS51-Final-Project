@@ -3,7 +3,7 @@ package image_comparer;
 /*
  * Constructs histograms to compare two images.
  */
-public class HistogramComparer implements PixelArrayComparer
+public class HistogramComparer extends PixelArrayComparer
 {
 	public HistogramComparer()
 	{
@@ -11,7 +11,7 @@ public class HistogramComparer implements PixelArrayComparer
 	}
 	
 	/* Creates a histogram from the colors of a pixel array */
-	public double[] processImage1(PixelArray a)
+	protected double[] getID(PixelArray a)
 	{
 		double[] rgba = new double[]{0.0, 0.0, 0.0};
 		int width = a.getWidth();
@@ -31,18 +31,16 @@ public class HistogramComparer implements PixelArrayComparer
 		return rgba;
 	}
 	
-	/* Compares the histograms of two pixel arrays */
-	public double compare(PixelArray a1, PixelArray a2)
+	protected double compareIDs(Object o1, Object o2)
 	{
-		double[] a1Rgba = new double[3];
-		double[] a2Rgba = new double[3];
-		a1Rgba = processImage1(a1);
-		a2Rgba = processImage1(a2);
+		double[] a1Rgba = (double[]) o1;
+		double[] a2Rgba = (double[]) o2;
+		
 		double difference = 0.0;
 		for (int i=0; i<3; i++){
 			difference += Math.abs(a1Rgba[i] - a2Rgba[i]);
 		}
+		
 		return (3.0-difference)/3.0;
 	}
-
 }
